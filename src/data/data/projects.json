@@ -1,415 +1,114 @@
 [
   {
-    "title": "MapNest",
-    "techStack": [
-      "ReactJS",
-      "Leaflet",
-      "Vite",
-      "JavaScript"
-    ],
-    "description": "Comprehensive travel planning tool that allows users to visually map out their entire trip itinerary on an interactive map.",
-    "logo": "MonitoLogo",
+    "title": "vLLM-Podium",
+    "techStack": ["Python", "vLLM", "Jupyter Notebook", "ngrok", "Kaggle"],
+    "description": "A self-contained setup for hosting a vLLM inference server on Kaggle, exposing it via ngrok, and connecting to it locally for experimentation.",
+    "logo": "",
     "link": {
-      "label": "MapNest",
-      "href": "https://mapnest.vercel.app/"
+      "label": "GitHub Repository",
+      "href": "https://github.com/aki-008/vLLM-Podium"
     }
   },
   {
-    "title": "PromptMotion",
-    "techStack": [
-      "AI",
-      "Node.js",
-      "NLP",
-      "ffmpeg",
-      "Express",
-      "Socket.io",
-      "GTTS"
-    ],
-    "description": "A tool for generating frame-based animations from script descriptions, bringing stories to life with AI-generated visuals.",
-    "logo": "MonitoLogo",
+    "title": "DevEcho",
+    "techStack": ["Python","fastapi", "LinkedIn API", "chromadb", "Langchain", "Telegram bot API"],
+    "description": "DevEcho is an AI-powered social media agent designed to generate engaging LinkedIn posts based on user-provided content. It automates data collection, retrieval, and post-generation using AI-driven processes.",
+    "logo": "",
     "link": {
-      "label": "PromptMotion",
-      "href": "https://github.com/crizmo/PromptMotion"
+      "label": "GitHub Repository",
+      "href": "https://github.com/aki-008/DevEcho"
+    }
+  },
+    {
+    "title": "GUARDIAN-EYE.AI",
+    "techStack": ["Python", "fastapi","uvicorn","Yolo", "ultralytics", "Computer Vision", "OpenCV", "Deep Learning"],
+    "description": "GUARDIAN EYE.AI provides an innovative solution for public safety in urban India, utilizing AI and computer vision to detect violence in real-time. This advanced technology enhances traditional surveillance methods.",
+    "logo": "",
+    "link": {
+      "label": "GitHub Repository",
+      "href": "https://github.com/aki-008/GUARDIAN-EYE.AI"
     }
   },
   {
-    "title": "TerraBound",
-    "techStack": [
-      "Satellite Imagery",  
-      "React",
-      "Vite",
-      "Leaflet",
-      "Tailwind CSS",
-      "Flask",
-      "GeoJSON",
-      "AI",
-      "Machine Learning"
-    ],
-    "description": "A web app for managing geographical features and auto-measuring land areas using AI and satellite imagery.",
-    "logo": "TerraBoundLogo",
+    "title": "CSVision",
+    "techStack": ["Python","Groq", "Llamaindex"],
+    "description": "CSVision is a web-based tool that allows users to analyze CSV datasets using AI-powered natural language queries. It utilizes Groq's large language models to generate insights and visualizations.",
+    "logo": "",
     "link": {
-      "label": "TerraBound",
-      "href": "https://github.com/crizmo/TerraBound"
+      "label": "GitHub Repository",
+      "href": "https://github.com/aki-008/CSVision"
+    }
+  },
+    {
+    "title": "Ollama-Hosting",
+    "techStack": ["Python", "Jupyter Notebook", "Ollama", "Kaggle", "ngrok"],
+    "description": "This project shows how to run Ollama on a weak computer using Kaggle for free GPU hosting, Ngrok for secure tunneling, and Open Web UI for interaction. It's a cost-effective, accessible solution for AI model hosting.",
+    "logo": "",
+    "link": {
+      "label": "GitHub Repository",
+      "href": "https://github.com/aki-008/Ollama-Hosting"
     }
   },
   {
-    "title": "Enhanced Godot 3D Multiplayer Template",
-    "techStack": [
-      "Godot Engine",
-      "Multiplayer",
-      "3D",
-      "Networking"
-    ],
-    "description": "An Enhanced Godot 3D Multiplayer Template with room-based multiplayer, proximity chat, and real-time synchronization.",
-    "logo": "GodotLogo",
+    "title": "Wanderlust",
+    "techStack": ["Python", "groq", "chromadb", "Langchain"
+  ],
+    "description": "Wanderlust is an AI-powered travel itinerary generator that helps users plan their trips effortlessly by asking a series of questions and generating personalized travel recommendations.",
+    "logo": "",
     "link": {
-      "label": "Enhanced Godot 3D Multiplayer Template",
-      "href": "https://github.com/crizmo/godot-3d-multiplayer-enhanced"
+      "label": "GitHub Repository",
+      "href": "https://github.com/aki-008/Wanderlust"
     }
-  },  
+  },
+
   {
-    "title": "Japanese-easy",
-    "techStack": [
-      "NPM",
-      "Node.js",
-      "node-fetch",
-      "Kanji API"
-    ],
-    "description": "A comprehensive toolkit for accessing and working with Japanese Kanji, Kana, and pronunciation data.",
-    "logo": "MonitoLogo",
+    "title": "Git_RAG",
+    "techStack": ["Python", "Langchain", "chromadb", "groq","Gitingest" ],
+    "description": "This project provides a streamlined way to ingest GitHub repositories, process their contents, and use Retrieval-Augmented Generation (RAG) with a Language Model to answer questions about the code.",
+    "logo": "",
     "link": {
-      "label": "Japanese-easy",
-      "href": "https://github.com/crizmo/japanese-easy"
+      "label": "GitHub Repository",
+      "href": "https://github.com/aki-008/Git_RAG"
+    }
+  },
+    {
+    "title": "Excelcopilot",
+    "techStack": ["Python"],
+    "description": "Excel automation and assistance tool powered by AI",
+    "logo": "",
+    "link": {
+      "label": "GitHub Repository",
+      "href": "https://github.com/aki-008/Excelcopilot"
     }
   },
   {
-    "title": "Mew",
-    "techStack": [
-      "Python",
-      "Stack",
-      "Bytecode",
-      "Interpreter"
-    ],
-    "description": "A Python-based stack interpreter for a custom bytecode language.",
-    "logo": "MonitoLogo",
+    "title": "Letter_Gen",
+    "techStack": ["Python", "Jupyter Notebook", "NLP", "Pytorch", "Transformers", "peft", "Accelerate","TRL"],
+    "description": "Letter Generator is a powerful tool for creating professional letters. It uses a pre-trained model fine-tuned with formal letters to generate accurate and customized correspondence. Save time and ensure professionalism.",
+    "logo": "",
     "link": {
-      "label": "Mew",
-      "href": "https://github.com/crizmo/mew"
+      "label": "GitHub Repository",
+      "href": "https://github.com/aki-008/Letter_Gen"
     }
   },
   {
-    "title": "Anyanime",
-    "techStack": [
-      "Node.js",
-      "Cloudinary",
-      "Express"
-    ],
-    "description": "Random anime image / gif generator ! With over 100k+ hits , 10k+ npm downloads! Simple but effective",
-    "logo": "Minimal",
+    "title": "Titanic_dataset_challenge",
+    "techStack": ["Python", "Jupyter Notebook", "Scikit-learn", "Pandas" ,"numpy", "matplotlib", "seaborn", "Kaggle"],
+    "description": "This is my submission for the Titanic dataset challenge - a classic machine learning problem for predicting passenger survival.",
+    "logo": "",
     "link": {
-      "label": "npmjs.com",
-      "href": "https://www.npmjs.com/package/anyanime"
+      "label": "GitHub Repository",
+      "href": "https://github.com/aki-008/Titanic---Machine-Learning-from-Disaster"
     }
   },
   {
-    "title": "Discord Cards",
-    "techStack": [
-      "JavaScript",
-      "React",
-      "Node.js",
-      "WebRTC",
-      "Socket.io"
-    ],
-    "description": "Discord Activity Cards. Share your rich presence with your friends",
-    "logo": "MonitoLogo",
+    "title": "RealState_price_prediction",
+    "techStack": ["Python", "Jupyter Notebook", "Scikit-learn", "Pandas" ,"numpy", "matplotlib", "seaborn"],
+    "description": "Real estate price prediction model using machine learning algorithms to forecast property values.",
+    "logo": "",
     "link": {
-      "label": "Discord Cards",
-      "href": "https://github.com/crizmo/DiscordCards"
-    }
-  },
-  {
-    "title": "KAnki",
-    "techStack": [
-      "JavaScript",
-      "Kindle",
-      "Anki"
-    ],
-    "description": "Anki specifically for jailbroken Kindle devices.",
-    "logo": "MonitoLogo",
-    "link": {
-      "label": "KAnki",
-      "href": "https://github.com/crizmo/KAnki"
-    }
-  },
-  {
-    "title": "KWordle",
-    "techStack": [
-      "JavaScript",
-      "Kindle",
-      "Wordle"
-    ],
-    "description": "Wordle specifically for jailbroken Kindle devices.",
-    "logo": "MonitoLogo",
-    "link": {
-      "label": "KWordle",
-      "href": "https://github.com/crizmo/KWordle"
-    }
-  },
-  {
-    "title": "Sudoku Solver",
-    "techStack": [
-      "React",
-      "MUI",
-      "Backtracking"
-    ],
-    "description": "Sudoku Solver provides an interactive way to solve Sudoku puzzles using visual backtracking algorithm.",
-    "logo": "SudokuSolverLogo",
-    "link": {
-      "label": "Sudoku Solver",
-      "href": "https://quicksudoku.vercel.app/"
-    }
-  },
-  {
-    "title": "CatLoafAI",
-    "techStack": [
-      "React",
-      "Express",
-      "TensorFlow",
-      "Machine Learning",
-      "JavaScript"
-    ],
-    "description": "Cat Loaf Rater is a machine learning-powered web application to train and rate cat loaves.",
-    "logo": "MonitoLogo",
-    "link": {
-      "label": "CatLoafAI",
-      "href": "https://github.com/crizmo/CatLoafAI"
-    }
-  },
-  {
-    "title": "PaintPals",
-    "techStack": [
-      "React",
-      "Node.js",
-      "Express",
-      "Socket.io"
-    ],
-    "description": "Multiplayer drawing site inspired by MS Paint. Users can create rooms and draw together in real-time.",
-    "logo": "MonitoLogo",
-    "link": {
-      "label": "PaintPals",
-      "href": "https://github.com/crizmo/PaintPals"
-    }
-  },
-  {
-    "title": "WebRTC Setup",
-    "techStack": [
-      "JavaScript",
-      "React",
-      "Node.js",
-      "WebRTC",
-      "Socket.io"
-    ],
-    "description": "Demo of WebRTC video application",
-    "logo": "ConsultlyLogo",
-    "link": {
-      "label": "Github",
-      "href": "https://github.com/crizmo/WebRTC-Group-Call"
-    }
-  },
-  {
-    "title": "PingPal",
-    "techStack": [
-      "JavaScript",
-      "Node.js",
-      "Express"
-    ],
-    "description": "Active pinger for all your personal projects. Keep your projects alive and running smoothly.",
-    "logo": "MobileVikingsLogo",
-    "link": {
-      "label": "github.com",
-      "href": "https://github.com/crizmo/PingPal"
-    }
-  },
-  {
-    "title": "KPaint",
-    "techStack": [
-      "C",
-      "GBDK",
-      "Game Boy Development",
-      "Kindle Optimization"
-    ],
-    "description": "A Game Boy drawing application optimized for Kindle, featuring a clean interface with static cursor and visual color selection indicators.",
-    "logo": "ConsultlyLogo",
-    "link": {
-      "label": "KPaint",
-      "href": "https://github.com/crizmo/KPaint"
-    }
-  },
-  {
-    "title": "Game Boy RPG Template",
-    "techStack": [
-      "C",
-      "GBDK",
-      "Game Boy Development",
-      "Sprite Animation"
-    ],
-    "description": "A simple top-down RPG template for Game Boy with four-directional player animations, camera system, and tile-based collision detection.",
-    "logo": "BarepapersLogo",
-    "link": {
-      "label": "Game Boy RPG Template",
-      "href": "https://github.com/crizmo/Game-Boy-RPG-Template"
-    }
-  },
-  {
-    "title": "MakeAWiki",
-    "techStack": [
-      "Node.js",
-      "Express",
-      "EJS",
-      "Markdown",
-      "Vercel"
-    ],
-    "description": "A flexible markdown-based wiki system with folder structure support, search functionality, and automatic table of contents generation.",
-    "logo": "ParabolLogo",
-    "link": {
-      "label": "MakeAWiki",
-      "href": "https://github.com/crizmo/MakeAWiki"
-    }
-  },
-  {
-    "title": "Elina",
-    "techStack": [
-      "Node.js",
-      "Express",
-      "Discord.js"
-    ],
-    "description": "Multipurpose discord bot in over 95+ servers, 10k+ users !",
-    "logo": "YearProgressLogo",
-    "link": {
-      "label": "github.com",
-      "href": "https://github.com/crizmo/Elina-dev"
-    }
-  },
-  {
-    "title": "Electron-image-host",
-    "techStack": [
-      "Electron",
-      "Node.js",
-      "Express",
-      "Cloudinary",
-      "ImgBB",
-      "Server"
-    ],
-    "description": "Simple demonstration of a desktop application that captures a screenshot and uploads it to a server. ",
-    "logo": "YearProgressLogo",
-    "link": {
-      "label": "Electron-image-host",
-      "href": "https://github.com/crizmo/Electron-image-host"
-    }
-  },
-  {
-    "title": "MangaMemories",
-    "techStack": [
-      "JavaScript",
-      "React",
-      "Node.js",
-      "MongoDB",
-      "Express"
-    ],
-    "description": "Unique platform that allows users to transform their daily moments into manga-style memories.",
-    "logo": "MonitoLogo",
-    "link": {
-      "label": "MangaMemories",
-      "href": "https://mangamemories.vercel.app/"
-    }
-  },
-  {
-    "title": "Electron-screenshot",
-    "techStack": [
-      "Electron",
-      "Node.js",
-      "App",
-      "desktopCapture"
-    ],
-    "description": "Screenshot App using Electron JS. A simple demonstration of a desktop application that captures a screenshot and uploads it to a server.",
-    "logo": "YearProgressLogo",
-    "link": {
-      "label": "Electron-screenshot",
-      "href": "https://github.com/crizmo/electron-screenshot"
-    }
-  },
-  {
-    "title": "Boundless",
-    "techStack": [
-      "React",
-      "Leaflet",
-      "Socket.IO", 
-      "Vite",
-      "Tailwind CSS",
-      "Express"
-    ],
-    "description": "A real-time multiplayer game inspired by Paper.io, where players compete to control territory on real-world maps. Capture zones, outmaneuver rivals, and climb the leaderboard!",
-    "logo": "MonitoLogo",
-    "link": {
-      "label": "Boundless",
-      "href": "https://github.com/crizmo/Boundless"
-    }
-  },
-  {
-    "title": "Cordle",
-    "techStack": [
-      "Svelte",
-      "javascript"
-    ],
-    "description": "Wordle for programmers ! A fun and challenging game that tests your coding knowledge and vocabulary.",
-    "logo": "YearProgressLogo",
-    "link": {
-      "label": "cordle.vercel.app",
-      "href": "https://cordle.vercel.app/"
-    }
-  },
-  {
-    "title": "Timely",
-    "techStack": [
-      "Full Stack Developer",
-      "JavaScript",
-      "React",
-      "Node.js"
-    ],
-    "description": "Reversed time tracking task manager!",
-    "logo": "ParabolLogo",
-    "link": {
-      "label": "timely",
-      "href": "https://timely-note.vercel.app/"
-    }
-  },
-  {
-    "title": "Pinscrape",
-    "techStack": [
-      "Node.js",
-      "Puppeteer",
-      "Express"
-    ],
-    "description": "Pinterest board, pins scraper",
-    "logo": "BarepapersLogo",
-    "link": {
-      "label": "Github",
-      "href": "https://github.com/crizmo/pinscrape"
-    }
-  },
-  {
-    "title": "Stream Savers",
-    "techStack": [
-      "JavaScript",
-      "React",
-      "Node.js",
-      "E.js"
-    ],
-    "description": "Free and open-source service to loop stream 24/7 to YouTube",
-    "logo": "TastyCloudLogo",
-    "link": {
-      "label": "github.com",
-      "href": "https://github.com/crizmo/Stream-Savers"
+      "label": "GitHub Repository",
+      "href": "https://github.com/aki-008/RealState_price_prediction"
     }
   }
 ]

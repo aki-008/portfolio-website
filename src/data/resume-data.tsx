@@ -8,32 +8,37 @@ import projectData from "./data/projects.json";
 import underDevelopmentData from "./data/underdev.json";
 
 export const RESUME_DATA = {
-  name: "Kurizu",
-  initials: "KV",
+  name: "あき [Aki]",
+  initials: "Ak",
   location: "",
   locationLink: "",
   about:
-    "As curious as a cat (with a keyboard), Eager to learn new things !",
-  summary: "I make stuff. Mostly code that miraculously runs (on a good day). Occasionally I draw questionable art. Frequently distracted by cats.",
-  avatarUrl: "https://avatars.githubusercontent.com/u/83665497?v=4",
-  personalWebsiteUrl: "https://kurizu.vercel.app/",
+    "I'm a Philomath, love me some art  q(≧▽≦q) and SWE . Currently learning  日本語, Eager to learn new things !",
+  summary: "I like to make stuff that I want or like . Mostly code that miraculously runs (on a good day). Occasionally I draw. Frequently distracted by knowledge. Ping me! Let's colab or just chat.",
+  avatarUrl: "https://i.pinimg.com/736x/66/4b/a3/664ba329af75c48378048d0831dd9859.jpg",
+  personalWebsiteUrl: "Website",
   contact: {
-    email: "",
+    email: "shaswatsingh910@gmail.com",
     tel: "",
     social: [
+      // {
+      //   name: "Email",
+      //   url: "shaswatsingh910@gmail.com",
+      //   // icon: GitHubIcon,
+      // },
       {
         name: "GitHub",
-        url: "https://github.com/crizmo",
+        url: "https://github.com/aki-008",
         icon: GitHubIcon,
       },
       {
         name: "X",
-        url: "https://twitter.com/KurizuTaz",
+        url: "https://x.com/shaswatsingh910",
         icon: XIcon,
       },
       {
         name: "Discord",
-        url: "https://discord.gg/drunkbetch-782646778347388959",
+        url: "https://discord.gg/VbEpfqaX",
         icon: DiscordIcon,
       },
     ],
@@ -41,23 +46,47 @@ export const RESUME_DATA = {
   skills: [
     {
       category: "Languages",
-      items: ["JavaScript", "Python", "TypeScript", "C", "Java"]
+     items: ["Python"]
     },
     {
       category: "Frameworks & Libraries",
-      items: ["React.js", "Redux", "Svelte", "Node.js", "Express", "WebRTC", "WebSockets", "Electron"]
+      items:[
+    "vLLM",
+    "jupyterlab",       
+    "ngrok-client",    
+    "kaggle",           
+    "groq",             
+    "llama-index",    
+    "chromadb",         
+    "langchain",        
+    "python-telegram-bot", 
+    "fastapi",          
+    "uvicorn",          
+    "ultralytics",      
+    "opencv-python",    
+    "scikit-learn",     
+    "pandas",           
+    "numpy",            
+    "matplotlib",       
+    "seaborn",          
+    "torch",           
+    "transformers",     
+    "accelerate",       
+    "peft",             
+    "trl"              
+]
     },
     {
       category: "Databases",
-      items: ["MongoDB", "Supabase", "Firebase"]
+      items: ["Chromadb", "Qdrant", "Sqlite"]
     },
     {
       category: "Tools & Platforms",
-      items: ["Linux", "Git", "GitHub", "Godot", "Blender"]
+      items: ["Git", "GitHub", "Blender", "Wezterm", "Ollama", "Postman"]
     },
     {
       category: "Other",
-      items: ["Drawing"]
+      items: ["Drawing", "Manga", "Gaming", "Japanese"]
     }
   ],
   projects: projectData,
@@ -69,5 +98,6 @@ export const RESUME_DATA = {
     "Drawing",
     "Anime",
     "Manga",
+    "Gaming",
   ],
 } as const;

@@ -1,64 +1,13 @@
 [
   {
-    "title": "Uben",
-    "techStack": [
-      "React",
-      "Express.js",
-      "MongoDB",
-      "Material UI",
-      "JWT",
-      "Language Learning"
-    ],
-    "description": "A multi-language learning platform featuring spaced repetition, structured lessons, vocabulary building, and custom deck creation.",
-    "logo": "TastyCloudLogo",
+    "title": "Arxplorer",
+    "techStack": ["Python"],
+    "description": "Research paper exploration tool (minimal description available)",
+    "logo": "",
     "link": {
-      "label": "Uben",
-      "href": "https://github.com/crizmo/Uben"
-    }
-  },
-  {
-    "title": "Sight",
-    "techStack": [
-      "React",
-      "Node.js",
-      "Express",
-      "MongoDB"
-    ],
-    "description": "Efficient and simple API Monitoring tool.",
-    "logo": "JojoMobileLogo",
-    "link": {
-      "label": "github.com",
-      "href": "https://github.com/Sight-v"
-    }
-  },
-  {
-    "title": "Quake",
-    "techStack": [
-      "React",
-      "Node.js",
-      "Express",
-      "MongoDB"
-    ],
-    "description": "A place for Creative Collaboration with a detailed Bounty System.",
-    "logo": "JojoMobileLogo",
-    "link": {
-      "label": "github.com",
-      "href": "https://github.com/Quake-IT"
-    }
-  },
-  {
-    "title": "Cat-Club",
-    "techStack": [
-      "React",
-      "Node.js",
-      "Express",
-      "TypeScript"
-    ],
-    "description": "Game like club pengiun but with cats",
-    "logo": "JojoMobileLogo",
-    "link": {
-      "label": "github.com",
-      "href": "https://github.com/crizmo/Cat-Club"
+      "label": "GitHub Repository",
+      "href": "https://github.com/aki-008/Arxplorer"
     }
   }
+
 ]

@@ -11,7 +11,7 @@ import { GlobeIcon, MailIcon, PhoneIcon } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { ProjectCard } from "../components/project-card";
 import { SunIcon, MoonIcon } from "lucide-react";
-
+import { ContactForm } from "../components/contact-form";
 
 export default function Page() {
   const [darkMode, setDarkMode] = useState(false);
@@ -180,6 +180,7 @@ export default function Page() {
           })),
         ]}
       />
+    {/* <ContactForm /> */}
     </main>
   );
 }
