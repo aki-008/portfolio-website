@@ -17,7 +17,8 @@
 - [Vercel Analytics](https://vercel.com/analytics) - Privacy-friendly analytics
 
 ## 📝 License
-Thanks to [crizmo](https://github.com/crizmo) , for making the original site, I'm just resuing it.
+Thanks to [crizmo](https://github.com/crizmo) , for making the original site, I'm just reusing it.
+
 This project is based on a template originally created by [Bartosz Jarocki](https://github.com/BartoszJarocki) under the MIT License.
 
 See the [LICENSE](LICENSE) file for more details.
