@@ -16,7 +16,7 @@ export const RESUME_DATA = {
     "I'm a Philomath, love me some art  q(≧▽≦q) and SWE . Currently learning  日本語, Eager to learn new things !",
   summary: "I like to make stuff that I want or like . Mostly code that miraculously runs (on a good day). Occasionally I draw. Frequently distracted by knowledge. Ping me! Let's colab or just chat.",
   avatarUrl: "https://i.pinimg.com/736x/66/4b/a3/664ba329af75c48378048d0831dd9859.jpg",
-  personalWebsiteUrl: "Website",
+  personalWebsiteUrl: "https://portfolio-website-nu-pearl.vercel.app/",
   contact: {
     email: "shaswatsingh910@gmail.com",
     tel: "",
