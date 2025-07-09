@@ -73,7 +73,8 @@ export const RESUME_DATA = {
     "transformers",     
     "accelerate",       
     "peft",             
-    "trl"              
+    "trl" ,
+    "Unsloth"
 ]
     },
     {
