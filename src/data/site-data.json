@@ -34,6 +34,11 @@
       "name": "HugginFace",
       "url": "https://huggingface.co/aki-008",
       "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQsa_s2rxUbkFzfFnkUW09-wKzvpzU2Wy8nw&s"
+    },
+    {
+      "name": "Resume",
+      "url": "https://github.com/aki-008/Docs/blob/main/Shaswat%20Singh%20resume.pdf",
+      "icon": "https://cdn.iconscout.com/icon/premium/png-256-thumb/cv-icon-svg-download-png-3962073.png?f=webp&w=128"
     }
   ],
   "skills": [
@@ -376,7 +381,7 @@
   ],
   "themeColors": {
     "light": {
-      "bg": "#f4ecec",
+      "bg": "#ede8e8",
       "text": "#000000",
       "border": "#030303"
     },

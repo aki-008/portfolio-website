@@ -648,11 +648,21 @@ export default function AdminPage() {
             </CardContent>
           </Card>
           <div className="mt-4 space-y-2">
+            <p className="text-sm text-muted-foreground mb-2">Drag to reorder</p>
             {siteData.publications.map((pub, i) => (
-              <div key={i} className="flex items-center justify-between p-3 border rounded-md">
-                <div>
-                  <p className="font-medium">{pub.title}</p>
-                  <p className="text-xs text-muted-foreground">{pub.authors} — {pub.date}</p>
+              <div key={i} draggable
+                onDragStart={e => { e.dataTransfer.setData("text/plain", i.toString()); (e.currentTarget as HTMLElement).classList.add("opacity-50"); }}
+                onDragOver={e => { e.preventDefault(); }}
+                onDragLeave={e => { (e.currentTarget as HTMLElement).classList.remove("opacity-50"); }}
+                onDrop={e => { e.preventDefault(); const from = parseInt(e.dataTransfer.getData("text/plain")); if (from === i) return; const u = [...siteData.publications]; const [m] = u.splice(from, 1); u.splice(i, 0, m); saveSiteData({ ...siteData, publications: u }); }}
+                className="flex items-center justify-between p-3 border rounded-md cursor-grab active:cursor-grabbing"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-muted-foreground cursor-grab">⠿</span>
+                  <div>
+                    <p className="font-medium">{pub.title}</p>
+                    <p className="text-xs text-muted-foreground">{pub.authors} — {pub.date}</p>
+                  </div>
                 </div>
                 <div className="flex gap-2">
                   <Button size="sm" variant="outline" onClick={() => { setEditingPub(i); setPubForm({ title: pub.title, authors: pub.authors, date: pub.date, linkUrl: pub.link?.href || "", description: pub.description || "" }); }}>Edit</Button>
