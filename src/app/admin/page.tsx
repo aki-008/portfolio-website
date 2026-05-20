@@ -72,6 +72,7 @@ interface SiteData {
     dark: { bg: string; text: string; border: string; cardBg: string; cardText: string };
   };
   hiddenSections?: string[];
+  iconSize?: number;
 }
 
 interface Message {
@@ -98,6 +99,7 @@ const defaultSiteData: SiteData = {
     dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937", cardBg: "#111111", cardText: "#f9fafb" },
   },
   hiddenSections: [],
+  iconSize: 4,
 };
 
 export default function AdminPage() {
@@ -162,7 +164,7 @@ export default function AdminPage() {
   const fetchData = async () => {
     const res = await fetch("/api/site-data");
     const data = await res.json();
-    setSiteData({ ...data, achievements: data.achievements || [], education: data.education || [], certificates: data.certificates || [] });
+    setSiteData({ ...data, achievements: data.achievements || [], education: data.education || [], certificates: data.certificates || [], iconSize: data.iconSize || 4 });
     setProfile(data.profile);
     setPreviewColors(data.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb", cardBg: "#f9fafb", cardText: "#000000" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937", cardBg: "#111111", cardText: "#f9fafb" } });
     setLoading(false);
@@ -359,11 +361,21 @@ export default function AdminPage() {
             </CardContent>
           </Card>
           <div className="mt-4 space-y-2">
+            <p className="text-sm text-muted-foreground mb-2">Drag to reorder</p>
             {siteData.social.map((s, i) => (
-              <div key={i} className="flex items-center justify-between p-3 border rounded-md">
-                <div>
-                  <p className="font-medium">{s.name}</p>
-                  <p className="text-sm text-muted-foreground">{s.url}</p>
+              <div key={i} draggable
+                onDragStart={e => { e.dataTransfer.setData("text/plain", i.toString()); (e.currentTarget as HTMLElement).classList.add("opacity-50"); }}
+                onDragOver={e => { e.preventDefault(); }}
+                onDragLeave={e => { (e.currentTarget as HTMLElement).classList.remove("opacity-50"); }}
+                onDrop={e => { e.preventDefault(); const from = parseInt(e.dataTransfer.getData("text/plain")); if (from === i) return; const u = [...siteData.social]; const [m] = u.splice(from, 1); u.splice(i, 0, m); saveSiteData({ ...siteData, social: u }); }}
+                className="flex items-center justify-between p-3 border rounded-md cursor-grab active:cursor-grabbing"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-muted-foreground cursor-grab">⠿</span>
+                  <div>
+                    <p className="font-medium">{s.name}</p>
+                    <p className="text-sm text-muted-foreground">{s.url}</p>
+                  </div>
                 </div>
                 <div className="flex gap-2">
                   <Button size="sm" variant="outline" onClick={() => { setEditingSocial(i); setSocialForm(s); }}>Edit</Button>
@@ -926,6 +938,24 @@ export default function AdminPage() {
                 <Button onClick={() => { saveSiteData({ ...siteData, themeColors: previewColors! }); }}>Save Colors</Button>
                 <Button variant="outline" onClick={() => setPreviewColors(siteData.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb", cardBg: "#f9fafb", cardText: "#000000" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937", cardBg: "#111111", cardText: "#f9fafb" } })}>Cancel</Button>
                 <Button variant="ghost" size="sm" onClick={() => setPreviewColors({ light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb", cardBg: "#f9fafb", cardText: "#000000" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937", cardBg: "#111111", cardText: "#f9fafb" } })}>Reset</Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="mt-6">
+            <CardHeader><CardTitle>Icon Size</CardTitle></CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground mb-4">Set the size of social media icons on the portfolio page.</p>
+              <div className="flex items-center gap-4">
+                <select value={siteData.iconSize || 4}
+                  onChange={e => saveSiteData({ ...siteData, iconSize: parseInt(e.target.value) })}
+                  className="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm">
+                  <option value={3}>Small (12px)</option>
+                  <option value={4}>Medium (16px)</option>
+                  <option value={5}>Large (20px)</option>
+                  <option value={6}>X-Large (24px)</option>
+                  <option value={8}>2X-Large (32px)</option>
+                </select>
               </div>
             </CardContent>
           </Card>

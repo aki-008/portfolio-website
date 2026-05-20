@@ -11,24 +11,14 @@
   },
   "social": [
     {
+      "name": "Resume",
+      "url": "https://github.com/aki-008/Docs/blob/main/Shaswat%20Singh%20resume.pdf",
+      "icon": "https://www.svgrepo.com/show/533447/square-cv.svg"
+    },
+    {
       "name": "GitHub",
       "url": "https://github.com/aki-008",
       "icon": "GitHub"
-    },
-    {
-      "name": "X",
-      "url": "https://x.com/shaswatsingh910",
-      "icon": "X"
-    },
-    {
-      "name": "Discord",
-      "url": "https://discord.gg/VbEpfqaX",
-      "icon": "Discord"
-    },
-    {
-      "name": "Kaggle",
-      "url": "https://www.kaggle.com/singh008",
-      "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQocgnR9Y_Aq33mYH-oARaN0iIEEb96TllMTQ&s"
     },
     {
       "name": "HugginFace",
@@ -36,9 +26,19 @@
       "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQsa_s2rxUbkFzfFnkUW09-wKzvpzU2Wy8nw&s"
     },
     {
-      "name": "Resume",
-      "url": "https://github.com/aki-008/Docs/blob/main/Shaswat%20Singh%20resume.pdf",
-      "icon": "https://cdn.iconscout.com/icon/premium/png-256-thumb/cv-icon-svg-download-png-3962073.png?f=webp&w=128"
+      "name": "Kaggle",
+      "url": "https://www.kaggle.com/singh008",
+      "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQocgnR9Y_Aq33mYH-oARaN0iIEEb96TllMTQ&s"
+    },
+    {
+      "name": "Discord",
+      "url": "https://discord.gg/VbEpfqaX",
+      "icon": "Discord"
+    },
+    {
+      "name": "X",
+      "url": "https://x.com/shaswatsingh910",
+      "icon": "X"
     }
   ],
   "skills": [
@@ -421,5 +421,6 @@
         "href": "https://catalog-education.oracle.com/ords/certview/sharebadge?id=3C5CC85EB92C5F5826B8C6BF3BD1D91BB5BC2663AA7A2B11E82A04F2628635D3"
       }
     }
-  ]
+  ],
+  "iconSize": 6
 }

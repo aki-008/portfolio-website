@@ -79,6 +79,7 @@ interface SiteData {
     dark: { bg: string; text: string; border: string; cardBg: string; cardText: string };
   };
   hiddenSections?: string[];
+  iconSize?: number;
 }
 
 export default function Page() {
@@ -104,6 +105,7 @@ export default function Page() {
       dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937", cardBg: "#111111", cardText: "#f9fafb" },
     },
     hiddenSections: [],
+    iconSize: 4,
   };
 
   useEffect(() => {
@@ -118,7 +120,7 @@ export default function Page() {
     fetch('/api/site-data')
       .then(res => res.json())
       .then((siteData: SiteData) => {
-        setData({ ...siteData, achievements: siteData.achievements || [], education: siteData.education || [], certificates: siteData.certificates || [] });
+        setData({ ...siteData, achievements: siteData.achievements || [], education: siteData.education || [], certificates: siteData.certificates || [], iconSize: siteData.iconSize || 4 });
         const tc = siteData.themeColors;
         if (tc?.dark) {
           document.documentElement.style.setProperty("--theme-dark-bg", tc.dark.bg);
@@ -139,6 +141,7 @@ export default function Page() {
       .finally(() => setLoading(false));
   }, []);
 
+  const iconSizeClass = ({ 3: "h-3 w-3", 4: "h-4 w-4", 5: "h-5 w-5", 6: "h-6 w-6", 8: "h-8 w-8" })[d.iconSize || 4] || "h-4 w-4";
   const completedProjects = d.projects.filter(p => p.status === "completed");
   const underDevProjects = d.projects.filter(p => p.status === "under-development");
 
@@ -184,7 +187,7 @@ export default function Page() {
                       className="h-8 w-8"
                     >
                       <a href={social.url} target="_blank" rel="noreferrer" title={social.name}>
-                        <img src={social.icon} alt={social.name} className="h-4 w-4" />
+                        <img src={social.icon} alt={social.name} className={iconSizeClass} />
                       </a>
                     </Button>
                   );
@@ -204,7 +207,7 @@ export default function Page() {
                       rel="noreferrer"
                       title={`${social.name}: ${social.url}`}
                     >
-                      <Icon className="h-4 w-4" />
+                      <Icon className={iconSizeClass} />
                     </a>
                   </Button>
                 );
