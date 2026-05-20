@@ -52,6 +52,10 @@ interface SiteData {
   interests: string[];
   projects: (Project & { status: string })[];
   publications: Publication[];
+  themeColors?: {
+    light: { bg: string; text: string; border: string };
+    dark: { bg: string; text: string; border: string };
+  };
 }
 
 export default function Page() {
@@ -69,6 +73,10 @@ export default function Page() {
       ...RESUME_DATA.underDevelopment.map(p => ({ ...p, status: "under-development" as const, deployLink: undefined as string | undefined })),
     ],
     publications: [],
+    themeColors: {
+      light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb" },
+      dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937" },
+    },
   };
 
   useEffect(() => {
@@ -82,7 +90,20 @@ export default function Page() {
   useEffect(() => {
     fetch('/api/site-data')
       .then(res => res.json())
-      .then((siteData: SiteData) => setData(siteData))
+      .then((siteData: SiteData) => {
+        setData(siteData);
+        const tc = siteData.themeColors;
+        if (tc?.dark) {
+          document.documentElement.style.setProperty("--theme-dark-bg", tc.dark.bg);
+          document.documentElement.style.setProperty("--theme-dark-text", tc.dark.text);
+          document.documentElement.style.setProperty("--theme-dark-border", tc.dark.border);
+        }
+        if (tc?.light) {
+          document.documentElement.style.setProperty("--theme-light-bg", tc.light.bg);
+          document.documentElement.style.setProperty("--theme-light-text", tc.light.text);
+          document.documentElement.style.setProperty("--theme-light-border", tc.light.border);
+        }
+      })
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);
@@ -98,7 +119,13 @@ export default function Page() {
       >
         {darkMode ? <SunIcon className="h-6 w-6" /> : <MoonIcon className="h-6 w-6" />}
       </button>
-      <section className="mx-auto w-full max-w-5xl space-y-8 bg-white dark:bg-black print:space-y-6">
+      <section
+        className="mx-auto w-full max-w-5xl space-y-8 print:space-y-6"
+        style={{
+          backgroundColor: darkMode ? (d.themeColors?.dark?.bg || "#000000") : (d.themeColors?.light?.bg || "#ffffff"),
+          color: darkMode ? (d.themeColors?.dark?.text || "#f9fafb") : (d.themeColors?.light?.text || "#000000"),
+        }}
+      >
         <div className="flex items-start justify-between">
           <div className="flex-1 space-y-1.5">
             <h1 className="text-2xl font-bold dark:text-white">{d.profile.name}</h1>
@@ -117,6 +144,21 @@ export default function Page() {
             </p>
             <div className="flex gap-x-1 pt-1 font-mono text-sm text-muted-foreground">
               {d.social.map((social) => {
+                if (social.icon.startsWith("http")) {
+                  return (
+                    <Button
+                      key={social.name}
+                      variant="outline"
+                      size="icon"
+                      asChild
+                      className="h-8 w-8"
+                    >
+                      <a href={social.url} target="_blank" rel="noreferrer" title={social.name}>
+                        <img src={social.icon} alt={social.name} className="h-4 w-4" />
+                      </a>
+                    </Button>
+                  );
+                }
                 const Icon = getIcon(social.icon) as ComponentType<{ className?: string }>;
                 return (
                   <Button

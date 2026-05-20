@@ -357,5 +357,17 @@
       "status": "completed"
     }
   ],
-  "publications": []
+  "publications": [],
+  "themeColors": {
+    "light": {
+      "bg": "#f4ebeb",
+      "text": "#000000",
+      "border": "#e5e7eb"
+    },
+    "dark": {
+      "bg": "#504e4e",
+      "text": "#f9fafb",
+      "border": "#1f2937"
+    }
+  }
 }

@@ -44,6 +44,10 @@ interface SiteData {
   interests: string[];
   projects: Project[];
   publications: Publication[];
+  themeColors?: {
+    light: { bg: string; text: string; border: string };
+    dark: { bg: string; text: string; border: string };
+  };
 }
 
 interface Message {
@@ -68,7 +72,7 @@ export default function AdminPage() {
   const { data: session, status } = useSession();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [tab, setTab] = useState<"profile" | "social" | "skills" | "interests" | "projects" | "publications" | "messages">("projects");
+  const [tab, setTab] = useState<"profile" | "social" | "skills" | "interests" | "projects" | "publications" | "colors" | "messages">("projects");
 
   const [siteData, setSiteData] = useState<SiteData>(defaultSiteData);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -93,6 +97,12 @@ export default function AdminPage() {
 
   // Project form
   const [projectForm, setProjectForm] = useState({ title: "", description: "", techStack: "", linkLabel: "", linkHref: "", deployLink: "", status: "completed" });
+
+  // Publication form
+  const [pubForm, setPubForm] = useState({ title: "", authors: "", date: "", linkUrl: "", description: "" });
+
+  // Theme form
+  const [themeColors, setThemeColors] = useState<{ light: { bg: string; text: string; border: string }; dark: { bg: string; text: string; border: string } } | null>(null);
   const [editingProject, setEditingProject] = useState<string | null>(null);
 
   const fetchData = async () => {
@@ -158,6 +168,7 @@ export default function AdminPage() {
     { key: "interests", label: "Interests" },
     { key: "projects", label: "Projects" },
     { key: "publications", label: "Publications" },
+    { key: "colors", label: "Colors" },
     { key: "messages", label: `Messages (${messages.length})` },
   ] as const;
 
@@ -509,42 +520,37 @@ export default function AdminPage() {
               <div className="space-y-4">
                 <div className="space-y-2">
                   <Label>Title</Label>
-                  <Input placeholder="Paper title" id="pub-title" />
+                  <Input value={pubForm.title} onChange={e => setPubForm({ ...pubForm, title: e.target.value })} placeholder="Paper title" />
                 </div>
                 <div className="space-y-2">
                   <Label>Authors</Label>
-                  <Input placeholder="Author names" id="pub-authors" />
+                  <Input value={pubForm.authors} onChange={e => setPubForm({ ...pubForm, authors: e.target.value })} placeholder="Author names" />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>Date</Label>
-                    <Input type="date" id="pub-date" />
+                    <Input type="date" value={pubForm.date} onChange={e => setPubForm({ ...pubForm, date: e.target.value })} />
                   </div>
                   <div className="space-y-2">
                     <Label>Link URL</Label>
-                    <Input placeholder="https://..." id="pub-link" />
+                    <Input value={pubForm.linkUrl} onChange={e => setPubForm({ ...pubForm, linkUrl: e.target.value })} placeholder="https://..." />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <Label>Description (optional)</Label>
-                  <textarea className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm" rows={2} id="pub-desc" />
+                  <textarea value={pubForm.description} onChange={e => setPubForm({ ...pubForm, description: e.target.value })}
+                    className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm" rows={2} />
                 </div>
-                <Button onClick={() => {
-                  const title = (document.getElementById("pub-title") as HTMLInputElement).value;
-                  const authors = (document.getElementById("pub-authors") as HTMLInputElement).value;
-                  const date = (document.getElementById("pub-date") as HTMLInputElement).value;
-                  const linkUrl = (document.getElementById("pub-link") as HTMLInputElement).value;
-                  const desc = (document.getElementById("pub-desc") as HTMLTextAreaElement).value;
-                  if (!title || !authors || !date) return;
-                  const pub: Publication = { title, authors, date, description: desc || undefined };
-                  if (linkUrl) pub.link = { label: "Link", href: linkUrl };
-                  saveSiteData({ ...siteData, publications: [...siteData.publications, pub] });
-                  (document.getElementById("pub-title") as HTMLInputElement).value = "";
-                  (document.getElementById("pub-authors") as HTMLInputElement).value = "";
-                  (document.getElementById("pub-date") as HTMLInputElement).value = "";
-                  (document.getElementById("pub-link") as HTMLInputElement).value = "";
-                  (document.getElementById("pub-desc") as HTMLTextAreaElement).value = "";
-                }}>Add Publication</Button>
+                <div className="flex gap-2">
+                  <Button onClick={() => {
+                    if (!pubForm.title || !pubForm.authors || !pubForm.date) return;
+                    const pub: Publication = { title: pubForm.title, authors: pubForm.authors, date: pubForm.date, description: pubForm.description || undefined };
+                    if (pubForm.linkUrl) pub.link = { label: "Link", href: pubForm.linkUrl };
+                    saveSiteData({ ...siteData, publications: [...siteData.publications, pub] });
+                    setPubForm({ title: "", authors: "", date: "", linkUrl: "", description: "" });
+                  }}>Add Publication</Button>
+                  {siteData.publications.length > 0 && <Button variant="outline" onClick={() => setPubForm({ title: "", authors: "", date: "", linkUrl: "", description: "" })}>Clear</Button>}
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -561,6 +567,93 @@ export default function AdminPage() {
               </div>
             ))}
           </div>
+        </Section>
+      )}
+
+      {/* ===== COLORS TAB ===== */}
+      {tab === "colors" && (
+        <Section>
+          <Card>
+            <CardHeader><CardTitle>Theme Colors</CardTitle></CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground mb-4">Set colors for light and dark modes. Changes apply instantly on the main page.</p>
+              <div className="grid grid-cols-2 gap-6">
+                <div>
+                  <h3 className="font-semibold mb-3">Light Mode</h3>
+                  <div className="space-y-3">
+                    <div className="space-y-1">
+                      <Label>Background</Label>
+                      <input type="color" className="w-full h-10 rounded cursor-pointer"
+                        value={siteData.themeColors?.light?.bg || "#ffffff"}
+                        onChange={e => {
+                          const updated = { ...siteData, themeColors: { ...(siteData.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937" } }), light: { ...((siteData.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937" } }).light), bg: e.target.value } } };
+                          setThemeColors(updated.themeColors);
+                          saveSiteData(updated);
+                        }} />
+                    </div>
+                    <div className="space-y-1">
+                      <Label>Text</Label>
+                      <input type="color" className="w-full h-10 rounded cursor-pointer"
+                        value={siteData.themeColors?.light?.text || "#000000"}
+                        onChange={e => {
+                          const updated = { ...siteData, themeColors: { ...(siteData.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937" } }), light: { ...((siteData.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937" } }).light), text: e.target.value } } };
+                          setThemeColors(updated.themeColors);
+                          saveSiteData(updated);
+                        }} />
+                    </div>
+                    <div className="space-y-1">
+                      <Label>Border</Label>
+                      <input type="color" className="w-full h-10 rounded cursor-pointer"
+                        value={siteData.themeColors?.light?.border || "#e5e7eb"}
+                        onChange={e => {
+                          const updated = { ...siteData, themeColors: { ...(siteData.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937" } }), light: { ...((siteData.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937" } }).light), border: e.target.value } } };
+                          setThemeColors(updated.themeColors);
+                          saveSiteData(updated);
+                        }} />
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h3 className="font-semibold mb-3">Dark Mode</h3>
+                  <div className="space-y-3">
+                    <div className="space-y-1">
+                      <Label>Background</Label>
+                      <input type="color" className="w-full h-10 rounded cursor-pointer"
+                        value={siteData.themeColors?.dark?.bg || "#000000"}
+                        onChange={e => {
+                          const updated = { ...siteData, themeColors: { ...(siteData.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937" } }), dark: { ...((siteData.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937" } }).dark), bg: e.target.value } } };
+                          setThemeColors(updated.themeColors);
+                          saveSiteData(updated);
+                        }} />
+                    </div>
+                    <div className="space-y-1">
+                      <Label>Text</Label>
+                      <input type="color" className="w-full h-10 rounded cursor-pointer"
+                        value={siteData.themeColors?.dark?.text || "#f9fafb"}
+                        onChange={e => {
+                          const updated = { ...siteData, themeColors: { ...(siteData.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937" } }), dark: { ...((siteData.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937" } }).dark), text: e.target.value } } };
+                          setThemeColors(updated.themeColors);
+                          saveSiteData(updated);
+                        }} />
+                    </div>
+                    <div className="space-y-1">
+                      <Label>Border</Label>
+                      <input type="color" className="w-full h-10 rounded cursor-pointer"
+                        value={siteData.themeColors?.dark?.border || "#1f2937"}
+                        onChange={e => {
+                          const updated = { ...siteData, themeColors: { ...(siteData.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937" } }), dark: { ...((siteData.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937" } }).dark), border: e.target.value } } };
+                          setThemeColors(updated.themeColors);
+                          saveSiteData(updated);
+                        }} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-4 pt-4 border-t">
+                <Button variant="outline" onClick={() => saveSiteData({ ...siteData, themeColors: undefined })}>Reset to Default</Button>
+              </div>
+            </CardContent>
+          </Card>
         </Section>
       )}
 
