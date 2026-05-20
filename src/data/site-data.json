@@ -1,0 +1,329 @@
+{
+  "profile": {
+    "name": "あき [Aki]",
+    "initials": "Ak",
+    "about": "I'm a Shaswat Singh. Love me some art  q(≧▽≦q) and SWE . Currently learning  日本語, Eager to learn new things !",
+    "summary": "I like to make stuff that I want or like . Mostly code that miraculously runs (on a good day). Occasionally I draw. Frequently distracted by knowledge. Ping me! Let's colab or just chat.",
+    "avatarUrl": "https://media.tenor.com/YrR48WQtTQEAAAAi/hamchat-collection.gif",
+    "personalWebsiteUrl": "https://portfolio-website-nu-pearl.vercel.app/",
+    "email": "shaswatsingh910@gmail.com",
+    "tel": ""
+  },
+  "social": [
+    {
+      "name": "GitHub",
+      "url": "https://github.com/aki-008",
+      "icon": "GitHub"
+    },
+    {
+      "name": "X",
+      "url": "https://x.com/shaswatsingh910",
+      "icon": "X"
+    },
+    {
+      "name": "Discord",
+      "url": "https://discord.gg/VbEpfqaX",
+      "icon": "Discord"
+    }
+  ],
+  "skills": [
+    {
+      "category": "Languages",
+      "items": [
+        "Python"
+      ]
+    },
+    {
+      "category": "Frameworks & Libraries",
+      "items": [
+        "vLLM",
+        "jupyterlab",
+        "ngrok-client",
+        "kaggle",
+        "groq",
+        "llama-index",
+        "chromadb",
+        "langchain",
+        "python-telegram-bot",
+        "fastapi",
+        "uvicorn",
+        "ultralytics",
+        "opencv-python",
+        "scikit-learn",
+        "pandas",
+        "numpy",
+        "matplotlib",
+        "seaborn",
+        "torch",
+        "transformers",
+        "accelerate",
+        "peft",
+        "trl",
+        "Unsloth"
+      ]
+    },
+    {
+      "category": "Databases",
+      "items": [
+        "Chromadb",
+        "Qdrant",
+        "Sqlite"
+      ]
+    },
+    {
+      "category": "Tools & Platforms",
+      "items": [
+        "Git",
+        "GitHub",
+        "Blender",
+        "Wezterm",
+        "Ollama",
+        "Postman"
+      ]
+    },
+    {
+      "category": "Other",
+      "items": [
+        "Drawing",
+        "Manga",
+        "Gaming",
+        "Japanese"
+      ]
+    }
+  ],
+  "interests": [
+    "Programming",
+    "Japanese",
+    "Music",
+    "Drawing",
+    "Anime",
+    "Manga",
+    "Gaming"
+  ],
+  "projects": [
+    {
+      "id": "vllm-podium",
+      "title": "vLLM-Podium",
+      "description": "A self-contained setup for hosting a vLLM inference server on Kaggle, exposing it via ngrok, and connecting to it locally for experimentation.",
+      "techStack": [
+        "Python",
+        "vLLM",
+        "Jupyter Notebook",
+        "ngrok",
+        "Kaggle"
+      ],
+      "link": {
+        "label": "GitHub Repository",
+        "href": "https://github.com/aki-008/vLLM-Podium"
+      },
+      "status": "completed"
+    },
+    {
+      "id": "devecho",
+      "title": "DevEcho",
+      "description": "DevEcho is an AI-powered social media agent designed to generate engaging LinkedIn posts based on user-provided content. It automates data collection, retrieval, and post-generation using AI-driven processes.",
+      "techStack": [
+        "Python",
+        "fastapi",
+        "LinkedIn API",
+        "chromadb",
+        "Langchain",
+        "Telegram bot API"
+      ],
+      "link": {
+        "label": "GitHub Repository",
+        "href": "https://github.com/aki-008/DevEcho"
+      },
+      "status": "completed"
+    },
+    {
+      "id": "guardian-eye",
+      "title": "GUARDIAN-EYE.AI",
+      "description": "GUARDIAN EYE.AI provides an innovative solution for public safety in urban India, utilizing AI and computer vision to detect violence in real-time.",
+      "techStack": [
+        "Python",
+        "fastapi",
+        "uvicorn",
+        "Yolo",
+        "ultralytics",
+        "Computer Vision",
+        "OpenCV",
+        "Deep Learning"
+      ],
+      "link": {
+        "label": "GitHub Repository",
+        "href": "https://github.com/aki-008/GUARDIAN-EYE.AI"
+      },
+      "status": "completed"
+    },
+    {
+      "id": "csvision",
+      "title": "CSVision",
+      "description": "CSVision is a web-based tool that allows users to analyze CSV datasets using AI-powered natural language queries.",
+      "techStack": [
+        "Python",
+        "Groq",
+        "Llamaindex"
+      ],
+      "link": {
+        "label": "GitHub Repository",
+        "href": "https://github.com/aki-008/CSVision"
+      },
+      "status": "completed"
+    },
+    {
+      "id": "ollama-hosting",
+      "title": "Ollama-Hosting",
+      "description": "This project shows how to run Ollama on a weak computer using Kaggle for free GPU hosting, Ngrok for secure tunneling, and Open Web UI for interaction.",
+      "techStack": [
+        "Python",
+        "Jupyter Notebook",
+        "Ollama",
+        "Kaggle",
+        "ngrok"
+      ],
+      "link": {
+        "label": "GitHub Repository",
+        "href": "https://github.com/aki-008/Ollama-Hosting"
+      },
+      "status": "completed"
+    },
+    {
+      "id": "wanderlust",
+      "title": "Wanderlust",
+      "description": "Wanderlust is an AI-powered travel itinerary generator that helps users plan their trips effortlessly.",
+      "techStack": [
+        "Python",
+        "groq",
+        "chromadb",
+        "Langchain"
+      ],
+      "link": {
+        "label": "GitHub Repository",
+        "href": "https://github.com/aki-008/Wanderlust"
+      },
+      "status": "completed"
+    },
+    {
+      "id": "git-rag",
+      "title": "Git_RAG",
+      "description": "Streamlined way to ingest GitHub repositories, process their contents, and use RAG with a Language Model to answer questions about the code.",
+      "techStack": [
+        "Python",
+        "Langchain",
+        "chromadb",
+        "groq",
+        "Gitingest"
+      ],
+      "link": {
+        "label": "GitHub Repository",
+        "href": "https://github.com/aki-008/Git_RAG"
+      },
+      "status": "completed"
+    },
+    {
+      "id": "excelcopilot",
+      "title": "Excelcopilot",
+      "description": "Excel automation and assistance tool powered by AI",
+      "techStack": [
+        "Python"
+      ],
+      "link": {
+        "label": "GitHub Repository",
+        "href": "https://github.com/aki-008/Excelcopilot"
+      },
+      "status": "completed"
+    },
+    {
+      "id": "letter-gen",
+      "title": "Letter_Gen",
+      "description": "Letter Generator is a powerful tool for creating professional letters using a pre-trained model fine-tuned with formal letters.",
+      "techStack": [
+        "Python",
+        "Jupyter Notebook",
+        "NLP",
+        "Pytorch",
+        "Transformers",
+        "peft",
+        "Accelerate",
+        "TRL"
+      ],
+      "link": {
+        "label": "GitHub Repository",
+        "href": "https://github.com/aki-008/Letter_Gen"
+      },
+      "status": "completed"
+    },
+    {
+      "id": "titanic-challenge",
+      "title": "Titanic_dataset_challenge",
+      "description": "Submission for the Titanic dataset challenge - a classic machine learning problem for predicting passenger survival.",
+      "techStack": [
+        "Python",
+        "Jupyter Notebook",
+        "Scikit-learn",
+        "Pandas",
+        "numpy",
+        "matplotlib",
+        "seaborn",
+        "Kaggle"
+      ],
+      "link": {
+        "label": "GitHub Repository",
+        "href": "https://github.com/aki-008/Titanic---Machine-Learning-from-Disaster"
+      },
+      "status": "completed"
+    },
+    {
+      "id": "realestate",
+      "title": "RealState_price_prediction",
+      "description": "Real estate price prediction model using machine learning algorithms to forecast property values.",
+      "techStack": [
+        "Python",
+        "Jupyter Notebook",
+        "Scikit-learn",
+        "Pandas",
+        "numpy",
+        "matplotlib",
+        "seaborn"
+      ],
+      "link": {
+        "label": "GitHub Repository",
+        "href": "https://github.com/aki-008/RealState_price_prediction"
+      },
+      "status": "completed"
+    },
+    {
+      "id": "prepai",
+      "title": "PrepAI",
+      "description": "Prep AI is a comprehensive, all-in-one AI platform designed to help job seekers and professionals master interview skills and deepen their subject knowledge.",
+      "techStack": [
+        "FastAPI",
+        "ChromaDB",
+        "Vapi",
+        "Groq/OpenAI",
+        "React + TypeScript + Vite",
+        "PostgreSQL",
+        "LlamaIndex"
+      ],
+      "link": {
+        "label": "Link",
+        "href": "https://github.com/aki-008/prepAI"
+      },
+      "status": "completed"
+    },
+    {
+      "id": "arxplorer",
+      "title": "Arxplorer",
+      "description": "Research paper exploration tool",
+      "techStack": [
+        "Python"
+      ],
+      "link": {
+        "label": "GitHub Repository",
+        "href": "https://github.com/aki-008/Arxplorer"
+      },
+      "status": "under-development"
+    }
+  ]
+}

@@ -2,31 +2,62 @@
 
 import { useEffect, useState } from 'react';
 import { RESUME_DATA } from "../data/resume-data";
+import { getIcon } from "@/lib/icon-map";
 import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
-import { Card, CardHeader, CardContent } from "../components/ui/card";
 import { Badge } from "../components/ui/badge";
 import { CommandMenu } from "../components/command-menu";
 import { Section } from "../components/ui/section";
-import { GlobeIcon, MailIcon, PhoneIcon } from "lucide-react";
+import { GlobeIcon } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { ProjectCard } from "../components/project-card";
 import { SunIcon, MoonIcon } from "lucide-react";
 import { ContactForm } from "../components/contact-form";
+import type { ComponentType } from "react";
 
 interface Project {
   id?: string;
   title: string;
   techStack: string[];
   description: string;
-  logo?: string;
   link?: { label: string; href: string };
+}
+
+interface SocialLink {
+  name: string;
+  url: string;
+  icon: string;
+}
+
+interface SiteData {
+  profile: {
+    name: string;
+    initials: string;
+    about: string;
+    summary: string;
+    avatarUrl: string;
+    personalWebsiteUrl: string;
+  };
+  social: SocialLink[];
+  skills: { category: string; items: string[] }[];
+  interests: string[];
+  projects: (Project & { status: string })[];
 }
 
 export default function Page() {
   const [darkMode, setDarkMode] = useState(false);
-  const [projects, setProjects] = useState<Project[]>(RESUME_DATA.projects);
-  const [underDev, setUnderDev] = useState<Project[]>(RESUME_DATA.underDevelopment);
+  const [data, setData] = useState<SiteData | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const d = data ?? {
+    profile: RESUME_DATA,
+    social: RESUME_DATA.contact.social.map(s => ({ name: s.name, url: s.url, icon: s.name })),
+    skills: RESUME_DATA.skills,
+    interests: RESUME_DATA.interests,
+    projects: [
+      ...RESUME_DATA.projects.map(p => ({ ...p, status: "completed" })),
+      ...RESUME_DATA.underDevelopment.map(p => ({ ...p, status: "under-development" })),
+    ],
+  };
 
   useEffect(() => {
     if (darkMode) {
@@ -37,15 +68,15 @@ export default function Page() {
   }, [darkMode]);
 
   useEffect(() => {
-    fetch('/api/projects')
+    fetch('/api/site-data')
       .then(res => res.json())
-      .then(data => {
-        if (data.projects) setProjects(data.projects);
-        if (data.underDevelopment) setUnderDev(data.underDevelopment);
-      })
+      .then((siteData: SiteData) => setData(siteData))
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);
+
+  const completedProjects = d.projects.filter(p => p.status === "completed");
+  const underDevProjects = d.projects.filter(p => p.status === "under-development");
 
   return (
     <main className="container relative mx-auto scroll-my-12 overflow-auto p-4 print:p-12 md:p-16">
@@ -58,75 +89,60 @@ export default function Page() {
       <section className="mx-auto w-full max-w-5xl space-y-8 bg-white dark:bg-gray-800 print:space-y-6">
         <div className="flex items-start justify-between">
           <div className="flex-1 space-y-1.5">
-            <h1 className="text-2xl font-bold dark:text-white">{RESUME_DATA.name}</h1>
+            <h1 className="text-2xl font-bold dark:text-white">{d.profile.name}</h1>
             <p className="text-pretty font-mono text-sm text-muted-foreground dark:text-gray-400">
-              {RESUME_DATA.about}
+              {d.profile.about}
             </p>
             <p className="max-w-md items-center text-pretty font-mono text-xs text-muted-foreground dark:text-gray-400">
               <a
                 className="inline-flex gap-x-1.5 align-baseline leading-none hover:underline"
-                href={RESUME_DATA.personalWebsiteUrl}
+                href={d.profile.personalWebsiteUrl}
                 target="_blank"
               >
                 <GlobeIcon className="h-3 w-3" style={{ marginTop: "-2px" }} />
-                {RESUME_DATA.personalWebsiteUrl}
+                {d.profile.personalWebsiteUrl}
               </a>
             </p>
             <div className="flex gap-x-1 pt-1 font-mono text-sm text-muted-foreground">
-              {RESUME_DATA.contact.social.map((social) => (
-                <Button
-                  key={social.name}
-                  variant="outline"
-                  size="icon"
-                  asChild
-                  className="h-8 w-8 hover:text-blue-500 hover:underline"
-                >
-                  <a
-                    href={social.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    title={`${social.name}: ${social.url}`}
+              {d.social.map((social) => {
+                const Icon = getIcon(social.icon) as ComponentType<{ className?: string }>;
+                return (
+                  <Button
+                    key={social.name}
+                    variant="outline"
+                    size="icon"
+                    asChild
+                    className="h-8 w-8 hover:text-blue-500 hover:underline"
                   >
-                    <social.icon className="h-4 w-4" />
-                  </a>
-                </Button>
-              ))}
+                    <a
+                      href={social.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      title={`${social.name}: ${social.url}`}
+                    >
+                      <Icon className="h-4 w-4" />
+                    </a>
+                  </Button>
+                );
+              })}
             </div>
           </div>
 
-          {/* <div className="flex flex-col gap-y-1 font-mono text-sm text-muted-foreground text-right">
-            {RESUME_DATA.location ? (
-              <p className="text-muted-foreground dark:text-gray-400">
-                <span>{RESUME_DATA.location}</span>
-              </p>
-            ) : null}
-            {RESUME_DATA.contact.email ? (
-              <a href={`mailto:${RESUME_DATA.contact.email}`}>
-                <span>Email: {RESUME_DATA.contact.email}</span>
-              </a>
-            ) : null}
-            {RESUME_DATA.contact.tel ? (
-              <a href={`tel:${RESUME_DATA.contact.tel}`}>
-                <span>Phone: {RESUME_DATA.contact.tel}</span>
-              </a>
-            ) : null}
-          </div> */}
-
           <Avatar className="h-28 w-28">
-            <AvatarImage alt={RESUME_DATA.name} src={RESUME_DATA.avatarUrl} />
-            <AvatarFallback>{RESUME_DATA.initials}</AvatarFallback>
+            <AvatarImage alt={d.profile.name} src={d.profile.avatarUrl} />
+            <AvatarFallback>{d.profile.initials}</AvatarFallback>
           </Avatar>
         </div>
         <Section>
           <h2 className="text-xl font-bold dark:text-white">About</h2>
           <p className="text-pretty font-mono text-sm text-muted-foreground dark:text-gray-400 w-full max-w-[105ch]">
-            {RESUME_DATA.summary}
+            {d.profile.summary}
           </p>
         </Section>
         <Section>
           <h2 className="text-xl font-bold dark:text-white">Skills</h2>
           <div className="space-y-2">
-            {RESUME_DATA.skills.map((skillCategory) => (
+            {d.skills.map((skillCategory) => (
               <div key={skillCategory.category} className="mb-2">
                 <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">{skillCategory.category}</h3>
                 <div className="flex flex-wrap gap-1.5 mt-1">
@@ -146,7 +162,7 @@ export default function Page() {
         <Section>
           <h2 className="print-force-new-page text-xl font-bold dark:text-white">Interests</h2>
           <div className="flex flex-wrap gap-1.5 mt-1">
-            {RESUME_DATA.interests.map((interest) => {
+            {d.interests.map((interest) => {
               return (
                 <Badge
                   key={interest}
@@ -164,7 +180,7 @@ export default function Page() {
             {loading ? (
               <p className="text-muted-foreground font-mono text-sm">Loading...</p>
             ) : (
-              projects.map((project) => {
+              completedProjects.map((project) => {
                 return (
                   <ProjectCard
                     key={project.id || project.title}
@@ -184,7 +200,7 @@ export default function Page() {
             {loading ? (
               <p className="text-muted-foreground font-mono text-sm">Loading...</p>
             ) : (
-              underDev.map((project) => {
+              underDevProjects.map((project) => {
                 return (
                   <ProjectCard
                     key={project.id || project.title}
@@ -203,12 +219,12 @@ export default function Page() {
       <CommandMenu
         links={[
           {
-            url: RESUME_DATA.personalWebsiteUrl,
+            url: d.profile.personalWebsiteUrl,
             title: "Personal Website",
           },
-          ...RESUME_DATA.contact.social.map((socilaMediaLink) => ({
-            url: socilaMediaLink.url,
-            title: socilaMediaLink.name,
+          ...d.social.map((link) => ({
+            url: link.url,
+            title: link.name,
           })),
           {
             url: "/admin",
@@ -219,4 +235,3 @@ export default function Page() {
     </main>
   );
 }
-

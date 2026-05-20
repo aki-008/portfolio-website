@@ -4,24 +4,22 @@ import { authOptions } from "@/lib/auth";
 import { promises as fs } from "fs";
 import path from "path";
 
-const PROJECTS_FILE = path.join(process.cwd(), "src/data/data/projects.json");
-const UNDERDEV_FILE = path.join(process.cwd(), "src/data/data/underdev.json");
+const DATA_FILE = path.join(process.cwd(), "src/data/site-data.json");
 
-async function readJSON(filePath: string) {
-  const data = await fs.readFile(filePath, "utf-8");
-  return JSON.parse(data);
+async function readData() {
+  const raw = await fs.readFile(DATA_FILE, "utf-8");
+  return JSON.parse(raw);
 }
 
-async function writeJSON(filePath: string, data: unknown[]) {
-  await fs.writeFile(filePath, JSON.stringify(data, null, 2));
+async function writeData(data: unknown) {
+  await fs.writeFile(DATA_FILE, JSON.stringify(data, null, 2));
 }
 
 export async function GET() {
-  const [projects, underDev] = await Promise.all([
-    readJSON(PROJECTS_FILE),
-    readJSON(UNDERDEV_FILE),
-  ]);
-  return NextResponse.json({ projects, underDevelopment: underDev });
+  const data = await readData();
+  const projects = data.projects.filter((p: { status: string }) => p.status === "completed");
+  const underDevelopment = data.projects.filter((p: { status: string }) => p.status === "under-development");
+  return NextResponse.json({ projects, underDevelopment });
 }
 
 async function checkAuth() {
@@ -39,21 +37,11 @@ export async function POST(request: Request) {
   const body = await request.json();
   const { type, data } = body;
 
-  if (type === "projects") {
-    const existing = await readJSON(PROJECTS_FILE);
-    const newProject = { ...data, id: Date.now().toString() };
-    await writeJSON(PROJECTS_FILE, [...existing, newProject]);
-    return NextResponse.json({ success: true, project: newProject });
-  }
-
-  if (type === "underDevelopment") {
-    const existing = await readJSON(UNDERDEV_FILE);
-    const newProject = { ...data, id: Date.now().toString() };
-    await writeJSON(UNDERDEV_FILE, [...existing, newProject]);
-    return NextResponse.json({ success: true, project: newProject });
-  }
-
-  return NextResponse.json({ error: "Invalid type" }, { status: 400 });
+  const siteData = await readData();
+  const newProject = { ...data, id: Date.now().toString(), status: type === "projects" ? "completed" : "under-development" };
+  siteData.projects.push(newProject);
+  await writeData(siteData);
+  return NextResponse.json({ success: true, project: newProject });
 }
 
 export async function PUT(request: Request) {
@@ -61,27 +49,14 @@ export async function PUT(request: Request) {
   if (authError) return authError;
 
   const body = await request.json();
-  const { type, id, data } = body;
+  const { id, data } = body;
 
-  if (type === "projects") {
-    const existing = await readJSON(PROJECTS_FILE);
-    const index = existing.findIndex((p: { id?: string }) => p.id === id);
-    if (index === -1) return NextResponse.json({ error: "Not found" }, { status: 404 });
-    existing[index] = { ...existing[index], ...data };
-    await writeJSON(PROJECTS_FILE, existing);
-    return NextResponse.json({ success: true });
-  }
-
-  if (type === "underDevelopment") {
-    const existing = await readJSON(UNDERDEV_FILE);
-    const index = existing.findIndex((p: { id?: string }) => p.id === id);
-    if (index === -1) return NextResponse.json({ error: "Not found" }, { status: 404 });
-    existing[index] = { ...existing[index], ...data };
-    await writeJSON(UNDERDEV_FILE, existing);
-    return NextResponse.json({ success: true });
-  }
-
-  return NextResponse.json({ error: "Invalid type" }, { status: 400 });
+  const siteData = await readData();
+  const index = siteData.projects.findIndex((p: { id?: string }) => p.id === id);
+  if (index === -1) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  siteData.projects[index] = { ...siteData.projects[index], ...data };
+  await writeData(siteData);
+  return NextResponse.json({ success: true });
 }
 
 export async function DELETE(request: Request) {
@@ -90,23 +65,13 @@ export async function DELETE(request: Request) {
 
   const { searchParams } = new URL(request.url);
   const id = searchParams.get("id");
-  const type = searchParams.get("type");
 
-  if (!id || !type) {
-    return NextResponse.json({ error: "Missing id or type" }, { status: 400 });
+  if (!id) {
+    return NextResponse.json({ error: "Missing id" }, { status: 400 });
   }
 
-  if (type === "projects") {
-    const existing = await readJSON(PROJECTS_FILE);
-    await writeJSON(PROJECTS_FILE, existing.filter((p: { id?: string }) => p.id !== id));
-    return NextResponse.json({ success: true });
-  }
-
-  if (type === "underDevelopment") {
-    const existing = await readJSON(UNDERDEV_FILE);
-    await writeJSON(UNDERDEV_FILE, existing.filter((p: { id?: string }) => p.id !== id));
-    return NextResponse.json({ success: true });
-  }
-
-  return NextResponse.json({ error: "Invalid type" }, { status: 400 });
+  const siteData = await readData();
+  siteData.projects = siteData.projects.filter((p: { id?: string }) => p.id !== id);
+  await writeData(siteData);
+  return NextResponse.json({ success: true });
 }

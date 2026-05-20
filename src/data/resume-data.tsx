@@ -1,104 +1,28 @@
-import { GitHubIcon } from "../components/icons/GitHubIcon";
-import { LinkedInIcon } from "../components/icons/LinkedInIcon";
-import { XIcon } from "../components/icons/XIcon";
-import { DiscordIcon } from "../components/icons/DiscordIcon";
-import { InstagramIcon } from "lucide-react";
+import siteData from "./site-data.json";
+import { getIcon } from "@/lib/icon-map";
 
-import projectData from "./data/projects.json";
-import underDevelopmentData from "./data/underdev.json";
+const raw = siteData;
 
 export const RESUME_DATA = {
-  name: "あき [Aki]",
-  initials: "Ak",
+  name: raw.profile.name,
+  initials: raw.profile.initials,
   location: "",
   locationLink: "",
-  about:
-    "I'm a Shaswat Singh. Love me some art  q(≧▽≦q) and SWE . Currently learning  日本語, Eager to learn new things !",
-  summary: "I like to make stuff that I want or like . Mostly code that miraculously runs (on a good day). Occasionally I draw. Frequently distracted by knowledge. Ping me! Let's colab or just chat.",
-  avatarUrl: "https://i.pinimg.com/736x/66/4b/a3/664ba329af75c48378048d0831dd9859.jpg",
-  personalWebsiteUrl: "https://portfolio-website-nu-pearl.vercel.app/",
+  about: raw.profile.about,
+  summary: raw.profile.summary,
+  avatarUrl: raw.profile.avatarUrl,
+  personalWebsiteUrl: raw.profile.personalWebsiteUrl,
   contact: {
-    email: "shaswatsingh910@gmail.com",
-    tel: "",
-    social: [
-      // {
-      //   name: "Email",
-      //   url: "shaswatsingh910@gmail.com",
-      //   // icon: GitHubIcon,
-      // },
-      {
-        name: "GitHub",
-        url: "https://github.com/aki-008",
-        icon: GitHubIcon,
-      },
-      {
-        name: "X",
-        url: "https://x.com/shaswatsingh910",
-        icon: XIcon,
-      },
-      {
-        name: "Discord",
-        url: "https://discord.gg/VbEpfqaX",
-        icon: DiscordIcon,
-      },
-    ],
+    email: raw.profile.email,
+    tel: raw.profile.tel,
+    social: raw.social.map((s) => ({
+      name: s.name,
+      url: s.url,
+      icon: getIcon(s.icon),
+    })),
   },
-  skills: [
-    {
-      category: "Languages",
-     items: ["Python"]
-    },
-    {
-      category: "Frameworks & Libraries",
-      items:[
-    "vLLM",
-    "jupyterlab",       
-    "ngrok-client",    
-    "kaggle",           
-    "groq",             
-    "llama-index",    
-    "chromadb",         
-    "langchain",        
-    "python-telegram-bot", 
-    "fastapi",          
-    "uvicorn",          
-    "ultralytics",      
-    "opencv-python",    
-    "scikit-learn",     
-    "pandas",           
-    "numpy",            
-    "matplotlib",       
-    "seaborn",          
-    "torch",           
-    "transformers",     
-    "accelerate",       
-    "peft",             
-    "trl" ,
-    "Unsloth"
-]
-    },
-    {
-      category: "Databases",
-      items: ["Chromadb", "Qdrant", "Sqlite"]
-    },
-    {
-      category: "Tools & Platforms",
-      items: ["Git", "GitHub", "Blender", "Wezterm", "Ollama", "Postman"]
-    },
-    {
-      category: "Other",
-      items: ["Drawing", "Manga", "Gaming", "Japanese"]
-    }
-  ],
-  projects: projectData,
-  underDevelopment: underDevelopmentData,
-  interests: [
-    "Programming",
-    "Japanese",
-    "Music",
-    "Drawing",
-    "Anime",
-    "Manga",
-    "Gaming",
-  ],
-} as const;
+  skills: raw.skills,
+  projects: raw.projects.filter((p) => p.status === "completed"),
+  underDevelopment: raw.projects.filter((p) => p.status === "under-development"),
+  interests: raw.interests,
+};
