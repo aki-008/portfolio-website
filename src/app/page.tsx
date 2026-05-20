@@ -53,8 +53,8 @@ interface SiteData {
   projects: (Project & { status: string })[];
   publications: Publication[];
   themeColors?: {
-    light: { bg: string; text: string; border: string };
-    dark: { bg: string; text: string; border: string };
+    light: { bg: string; text: string; border: string; cardBg: string; cardText: string };
+    dark: { bg: string; text: string; border: string; cardBg: string; cardText: string };
   };
   hiddenSections?: string[];
 }
@@ -75,8 +75,8 @@ export default function Page() {
     ],
     publications: [],
     themeColors: {
-      light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb" },
-      dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937" },
+      light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb", cardBg: "#f9fafb", cardText: "#000000" },
+      dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937", cardBg: "#111111", cardText: "#f9fafb" },
     },
     hiddenSections: [],
   };
@@ -99,11 +99,15 @@ export default function Page() {
           document.documentElement.style.setProperty("--theme-dark-bg", tc.dark.bg);
           document.documentElement.style.setProperty("--theme-dark-text", tc.dark.text);
           document.documentElement.style.setProperty("--theme-dark-border", tc.dark.border);
+          document.documentElement.style.setProperty("--theme-dark-card-bg", tc.dark.cardBg);
+          document.documentElement.style.setProperty("--theme-dark-card-text", tc.dark.cardText);
         }
         if (tc?.light) {
           document.documentElement.style.setProperty("--theme-light-bg", tc.light.bg);
           document.documentElement.style.setProperty("--theme-light-text", tc.light.text);
           document.documentElement.style.setProperty("--theme-light-border", tc.light.border);
+          document.documentElement.style.setProperty("--theme-light-card-bg", tc.light.cardBg);
+          document.documentElement.style.setProperty("--theme-light-card-text", tc.light.cardText);
         }
       })
       .catch(console.error)
@@ -238,9 +242,13 @@ export default function Page() {
         {d.publications.length > 0 && !d.hiddenSections?.includes("publications") && (
           <Section>
             <h2 className="text-xl font-bold dark:text-white">Publications</h2>
-            <div className="space-y-4">
-              {d.publications.map((pub, i) => (
-                <Card key={i}>
+            <div className="-mx-3 space-y-3">
+              {d.publications.map((pub, i) => {
+                const cardBg = darkMode ? (d.themeColors?.dark?.cardBg || "#111111") : (d.themeColors?.light?.cardBg || "#f9fafb");
+                const cardText = darkMode ? (d.themeColors?.dark?.cardText || "#f9fafb") : (d.themeColors?.light?.cardText || "#000000");
+                const cardBorder = darkMode ? (d.themeColors?.dark?.border || "#1f2937") : (d.themeColors?.light?.border || "#e5e7eb");
+                return (
+                <Card key={i} style={{ backgroundColor: cardBg, color: cardText, borderColor: cardBorder }} className="border">
                   <CardHeader>
                     <div className="flex justify-between items-start gap-4">
                       <div>
@@ -249,18 +257,19 @@ export default function Page() {
                             <a href={pub.link.href} target="_blank" className="hover:underline">{pub.title}</a>
                           ) : pub.title}
                         </CardTitle>
-                        <p className="text-sm text-muted-foreground mt-1">{pub.authors}</p>
-                        <p className="text-xs text-muted-foreground">{pub.date}</p>
+                        <p className="text-sm mt-1" style={{ color: cardText, opacity: 0.7 }}>{pub.authors}</p>
+                        <p className="text-xs" style={{ color: cardText, opacity: 0.5 }}>{pub.date}</p>
                       </div>
                     </div>
                   </CardHeader>
                   {pub.description && (
                     <CardContent>
-                      <p className="text-sm text-muted-foreground">{pub.description}</p>
+                      <p className="text-sm" style={{ color: cardText, opacity: 0.7 }}>{pub.description}</p>
                     </CardContent>
                   )}
                 </Card>
-              ))}
+                );
+              })}
             </div>
           </Section>
         )}
@@ -280,6 +289,9 @@ export default function Page() {
                     tags={project.techStack}
                     link={project.link?.href}
                     deployLink={project.deployLink}
+                    cardBg={darkMode ? (d.themeColors?.dark?.cardBg || "#111111") : (d.themeColors?.light?.cardBg || "#f9fafb")}
+                    cardText={darkMode ? (d.themeColors?.dark?.cardText || "#f9fafb") : (d.themeColors?.light?.cardText || "#000000")}
+                    cardBorder={darkMode ? (d.themeColors?.dark?.border || "#1f2937") : (d.themeColors?.light?.border || "#e5e7eb")}
                   />
                 );
               })
@@ -303,6 +315,9 @@ export default function Page() {
                     tags={project.techStack}
                     link={project.link?.href}
                     deployLink={project.deployLink}
+                    cardBg={darkMode ? (d.themeColors?.dark?.cardBg || "#111111") : (d.themeColors?.light?.cardBg || "#f9fafb")}
+                    cardText={darkMode ? (d.themeColors?.dark?.cardText || "#f9fafb") : (d.themeColors?.light?.cardText || "#000000")}
+                    cardBorder={darkMode ? (d.themeColors?.dark?.border || "#1f2937") : (d.themeColors?.light?.border || "#e5e7eb")}
                   />
                 );
               })

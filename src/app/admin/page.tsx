@@ -45,8 +45,8 @@ interface SiteData {
   projects: Project[];
   publications: Publication[];
   themeColors?: {
-    light: { bg: string; text: string; border: string };
-    dark: { bg: string; text: string; border: string };
+    light: { bg: string; text: string; border: string; cardBg: string; cardText: string };
+    dark: { bg: string; text: string; border: string; cardBg: string; cardText: string };
   };
   hiddenSections?: string[];
 }
@@ -67,6 +67,10 @@ const defaultSiteData: SiteData = {
   interests: [],
   projects: [],
   publications: [],
+  themeColors: {
+    light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb", cardBg: "#f9fafb", cardText: "#000000" },
+    dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937", cardBg: "#111111", cardText: "#f9fafb" },
+  },
   hiddenSections: [],
 };
 
@@ -105,7 +109,7 @@ export default function AdminPage() {
   const [pubMsg, setPubMsg] = useState("");
 
   // Theme form
-  const [previewColors, setPreviewColors] = useState<{ light: { bg: string; text: string; border: string }; dark: { bg: string; text: string; border: string } } | null>(null);
+  const [previewColors, setPreviewColors] = useState<{ light: { bg: string; text: string; border: string; cardBg: string; cardText: string }; dark: { bg: string; text: string; border: string; cardBg: string; cardText: string } } | null>(null);
   const [editingProject, setEditingProject] = useState<string | null>(null);
 
   const fetchData = async () => {
@@ -113,7 +117,7 @@ export default function AdminPage() {
     const data = await res.json();
     setSiteData(data);
     setProfile(data.profile);
-    setPreviewColors(data.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937" } });
+    setPreviewColors(data.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb", cardBg: "#f9fafb", cardText: "#000000" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937", cardBg: "#111111", cardText: "#f9fafb" } });
     setLoading(false);
   };
 
@@ -590,9 +594,9 @@ export default function AdminPage() {
                 <div>
                   <h3 className="font-semibold mb-3">Light Mode</h3>
                   <div className="space-y-3">
-                    {(["bg", "text", "border"] as const).map(field => (
+                    {(["bg", "text", "border", "cardBg", "cardText"] as const).map(field => (
                       <div key={field} className="space-y-1">
-                        <Label>{field === "bg" ? "Background" : field === "text" ? "Text" : "Border"}</Label>
+                        <Label>{field === "bg" ? "Background" : field === "text" ? "Text" : field === "border" ? "Border" : field === "cardBg" ? "Card Background" : "Card Text"}</Label>
                         <input type="color" className="w-full h-10 rounded cursor-pointer"
                           value={previewColors?.light?.[field] || "#ffffff"}
                           onChange={e => setPreviewColors(prev => prev ? { ...prev, light: { ...prev.light, [field]: e.target.value } } : prev)} />
@@ -603,9 +607,9 @@ export default function AdminPage() {
                 <div>
                   <h3 className="font-semibold mb-3">Dark Mode</h3>
                   <div className="space-y-3">
-                    {(["bg", "text", "border"] as const).map(field => (
+                    {(["bg", "text", "border", "cardBg", "cardText"] as const).map(field => (
                       <div key={field} className="space-y-1">
-                        <Label>{field === "bg" ? "Background" : field === "text" ? "Text" : "Border"}</Label>
+                        <Label>{field === "bg" ? "Background" : field === "text" ? "Text" : field === "border" ? "Border" : field === "cardBg" ? "Card Background" : "Card Text"}</Label>
                         <input type="color" className="w-full h-10 rounded cursor-pointer"
                           value={previewColors?.dark?.[field] || "#000000"}
                           onChange={e => setPreviewColors(prev => prev ? { ...prev, dark: { ...prev.dark, [field]: e.target.value } } : prev)} />
@@ -616,8 +620,8 @@ export default function AdminPage() {
               </div>
               <div className="flex gap-3 mt-6">
                 <Button onClick={() => { saveSiteData({ ...siteData, themeColors: previewColors! }); }}>Save Colors</Button>
-                <Button variant="outline" onClick={() => setPreviewColors(siteData.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937" } })}>Cancel</Button>
-                <Button variant="ghost" size="sm" onClick={() => setPreviewColors({ light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937" } })}>Reset</Button>
+                <Button variant="outline" onClick={() => setPreviewColors(siteData.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb", cardBg: "#f9fafb", cardText: "#000000" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937", cardBg: "#111111", cardText: "#f9fafb" } })}>Cancel</Button>
+                <Button variant="ghost" size="sm" onClick={() => setPreviewColors({ light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb", cardBg: "#f9fafb", cardText: "#000000" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937", cardBg: "#111111", cardText: "#f9fafb" } })}>Reset</Button>
               </div>
             </CardContent>
           </Card>

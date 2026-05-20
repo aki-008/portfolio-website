@@ -13,11 +13,20 @@ interface Props {
   tags: readonly string[];
   link?: string;
   deployLink?: string;
+  cardBg?: string;
+  cardText?: string;
+  cardBorder?: string;
 }
 
-export function ProjectCard({ title, description, tags, link, deployLink }: Props) {
+export function ProjectCard({ title, description, tags, link, deployLink, cardBg, cardText, cardBorder }: Props) {
   return (
-    <Card className="flex flex-col overflow-hidden border border-gray-200 rounded-lg ga p-3">
+    <Card className="flex flex-col overflow-hidden border rounded-lg p-3"
+      style={{
+        backgroundColor: cardBg,
+        color: cardText,
+        borderColor: cardBorder,
+      }}
+    >
       <CardHeader className="">
         <div className="space-y-1">
           <CardTitle className="text-base">

@@ -371,14 +371,14 @@
   ],
   "themeColors": {
     "light": {
-      "bg": "#ebe5e5",
+      "bg": "#f5efef",
       "text": "#000000",
-      "border": "#e5e7eb"
+      "border": "#030303"
     },
     "dark": {
-      "bg": "#2e2e2e",
+      "bg": "#262626",
       "text": "#f9fafb",
-      "border": "#2e2e2e"
+      "border": "#fdfcfc"
     }
   },
   "hiddenSections": []
