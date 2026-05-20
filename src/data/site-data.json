@@ -11,6 +11,11 @@
   },
   "social": [
     {
+      "name": "Email",
+      "url": "mailto:shaswatsingh910@gmail.com",
+      "icon": "https://static.vecteezy.com/system/resources/previews/004/999/412/non_2x/mail-icon-envelope-sign-email-symbol-free-vector.jpg"
+    },
+    {
       "name": "Resume",
       "url": "https://github.com/aki-008/Docs/blob/main/Shaswat%20Singh%20resume.pdf",
       "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhtNOZKdf-f44B-SBJdqVxx-HsLENUDV629Q&s"

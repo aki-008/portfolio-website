@@ -187,6 +187,7 @@ export default function Page() {
                       className="h-8 w-8"
                     >
                       <a href={social.url} target="_blank" rel="noreferrer" title={social.name}>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={social.icon} alt={social.name} className={iconSizeClass} />
                       </a>
                     </Button>
