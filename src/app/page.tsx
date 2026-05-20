@@ -5,6 +5,7 @@ import { RESUME_DATA } from "../data/resume-data";
 import { getIcon } from "@/lib/icon-map";
 import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 import { Badge } from "../components/ui/badge";
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../components/ui/card";
 import { CommandMenu } from "../components/command-menu";
 import { Section } from "../components/ui/section";
 import { GlobeIcon } from "lucide-react";
@@ -20,12 +21,21 @@ interface Project {
   techStack: string[];
   description: string;
   link?: { label: string; href: string };
+  deployLink?: string;
 }
 
 interface SocialLink {
   name: string;
   url: string;
   icon: string;
+}
+
+interface Publication {
+  title: string;
+  authors: string;
+  date: string;
+  link?: { label: string; href: string };
+  description?: string;
 }
 
 interface SiteData {
@@ -41,6 +51,7 @@ interface SiteData {
   skills: { category: string; items: string[] }[];
   interests: string[];
   projects: (Project & { status: string })[];
+  publications: Publication[];
 }
 
 export default function Page() {
@@ -54,9 +65,10 @@ export default function Page() {
     skills: RESUME_DATA.skills,
     interests: RESUME_DATA.interests,
     projects: [
-      ...RESUME_DATA.projects.map(p => ({ ...p, status: "completed" })),
-      ...RESUME_DATA.underDevelopment.map(p => ({ ...p, status: "under-development" })),
+      ...RESUME_DATA.projects.map(p => ({ ...p, status: "completed" as const, deployLink: undefined as string | undefined })),
+      ...RESUME_DATA.underDevelopment.map(p => ({ ...p, status: "under-development" as const, deployLink: undefined as string | undefined })),
     ],
+    publications: [],
   };
 
   useEffect(() => {
@@ -86,7 +98,7 @@ export default function Page() {
       >
         {darkMode ? <SunIcon className="h-6 w-6" /> : <MoonIcon className="h-6 w-6" />}
       </button>
-      <section className="mx-auto w-full max-w-5xl space-y-8 bg-white dark:bg-gray-800 print:space-y-6">
+      <section className="mx-auto w-full max-w-5xl space-y-8 bg-white dark:bg-black print:space-y-6">
         <div className="flex items-start justify-between">
           <div className="flex-1 space-y-1.5">
             <h1 className="text-2xl font-bold dark:text-white">{d.profile.name}</h1>
@@ -174,6 +186,35 @@ export default function Page() {
             })}
           </div>
         </Section>
+        {d.publications.length > 0 && (
+          <Section>
+            <h2 className="text-xl font-bold dark:text-white">Publications</h2>
+            <div className="space-y-4">
+              {d.publications.map((pub, i) => (
+                <Card key={i}>
+                  <CardHeader>
+                    <div className="flex justify-between items-start gap-4">
+                      <div>
+                        <CardTitle className="text-base">
+                          {pub.link ? (
+                            <a href={pub.link.href} target="_blank" className="hover:underline">{pub.title}</a>
+                          ) : pub.title}
+                        </CardTitle>
+                        <p className="text-sm text-muted-foreground mt-1">{pub.authors}</p>
+                        <p className="text-xs text-muted-foreground">{pub.date}</p>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  {pub.description && (
+                    <CardContent>
+                      <p className="text-sm text-muted-foreground">{pub.description}</p>
+                    </CardContent>
+                  )}
+                </Card>
+              ))}
+            </div>
+          </Section>
+        )}
         <Section className="scroll-mb-16">
           <h2 className="text-xl font-bold dark:text-white">Projects</h2>
           <div className="-mx-3 grid grid-cols-1 gap-3 print:grid-cols-3 print:gap-2 md:grid-cols-2 lg:grid-cols-3">
@@ -188,6 +229,7 @@ export default function Page() {
                     description={project.description}
                     tags={project.techStack}
                     link={project.link?.href}
+                    deployLink={project.deployLink}
                   />
                 );
               })
@@ -208,6 +250,7 @@ export default function Page() {
                     description={project.description}
                     tags={project.techStack}
                     link={project.link?.href}
+                    deployLink={project.deployLink}
                   />
                 );
               })

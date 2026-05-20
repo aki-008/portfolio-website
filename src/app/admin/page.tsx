@@ -16,7 +16,16 @@ interface Project {
   description: string;
   logo?: string;
   link?: { label: string; href: string };
+  deployLink?: string;
   status: string;
+}
+
+interface Publication {
+  title: string;
+  authors: string;
+  date: string;
+  link?: { label: string; href: string };
+  description?: string;
 }
 
 interface SiteData {
@@ -34,6 +43,7 @@ interface SiteData {
   skills: { category: string; items: string[] }[];
   interests: string[];
   projects: Project[];
+  publications: Publication[];
 }
 
 interface Message {
@@ -51,13 +61,14 @@ const defaultSiteData: SiteData = {
   skills: [],
   interests: [],
   projects: [],
+  publications: [],
 };
 
 export default function AdminPage() {
   const { data: session, status } = useSession();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [tab, setTab] = useState<"profile" | "social" | "skills" | "interests" | "projects" | "messages">("projects");
+  const [tab, setTab] = useState<"profile" | "social" | "skills" | "interests" | "projects" | "publications" | "messages">("projects");
 
   const [siteData, setSiteData] = useState<SiteData>(defaultSiteData);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -81,7 +92,7 @@ export default function AdminPage() {
   const [editingInterest, setEditingInterest] = useState<number | null>(null);
 
   // Project form
-  const [projectForm, setProjectForm] = useState({ title: "", description: "", techStack: "", linkLabel: "", linkHref: "", status: "completed" });
+  const [projectForm, setProjectForm] = useState({ title: "", description: "", techStack: "", linkLabel: "", linkHref: "", deployLink: "", status: "completed" });
   const [editingProject, setEditingProject] = useState<string | null>(null);
 
   const fetchData = async () => {
@@ -146,6 +157,7 @@ export default function AdminPage() {
     { key: "skills", label: "Skills" },
     { key: "interests", label: "Interests" },
     { key: "projects", label: "Projects" },
+    { key: "publications", label: "Publications" },
     { key: "messages", label: `Messages (${messages.length})` },
   ] as const;
 
@@ -384,11 +396,15 @@ export default function AdminPage() {
                       <Label>Link Label</Label>
                       <Input value={projectForm.linkLabel} onChange={e => setProjectForm({ ...projectForm, linkLabel: e.target.value })} placeholder="GitHub" />
                     </div>
-                    <div className="space-y-2">
-                      <Label>Link URL</Label>
-                      <Input value={projectForm.linkHref} onChange={e => setProjectForm({ ...projectForm, linkHref: e.target.value })} placeholder="https://..." />
-                    </div>
-                  </div>
+                <div className="space-y-2">
+                  <Label>Link URL</Label>
+                  <Input value={projectForm.linkHref} onChange={e => setProjectForm({ ...projectForm, linkHref: e.target.value })} placeholder="https://..." />
+                </div>
+                <div className="space-y-2">
+                  <Label>Deploy URL (optional)</Label>
+                  <Input value={projectForm.deployLink} onChange={e => setProjectForm({ ...projectForm, deployLink: e.target.value })} placeholder="https://..." />
+                </div>
+              </div>
                   <div className="space-y-2">
                     <Label>Status</Label>
                     <select value={projectForm.status} onChange={e => setProjectForm({ ...projectForm, status: e.target.value })}
@@ -406,6 +422,7 @@ export default function AdminPage() {
                         description: projectForm.description,
                         techStack: projectForm.techStack.split(",").map(s => s.trim()).filter(Boolean),
                         link: projectForm.linkHref ? { label: projectForm.linkLabel || "Link", href: projectForm.linkHref } : undefined,
+                        deployLink: projectForm.deployLink || undefined,
                         status: projectForm.status,
                       };
                       if (editingProject) {
@@ -415,10 +432,10 @@ export default function AdminPage() {
                         newProjects.push(entry);
                       }
                       saveSiteData({ ...siteData, projects: newProjects });
-                      setProjectForm({ title: "", description: "", techStack: "", linkLabel: "", linkHref: "", status: "completed" });
+                      setProjectForm({ title: "", description: "", techStack: "", linkLabel: "", linkHref: "", deployLink: "", status: "completed" });
                       setEditingProject(null);
                     }}>{editingProject ? "Update" : "Add"}</Button>
-                    {editingProject && <Button variant="outline" onClick={() => { setEditingProject(null); setProjectForm({ title: "", description: "", techStack: "", linkLabel: "", linkHref: "", status: "completed" }); }}>Cancel</Button>}
+                    {editingProject && <Button variant="outline" onClick={() => { setEditingProject(null); setProjectForm({ title: "", description: "", techStack: "", linkLabel: "", linkHref: "", deployLink: "", status: "completed" }); }}>Cancel</Button>}
                   </div>
                 </div>
               </CardContent>
@@ -426,21 +443,42 @@ export default function AdminPage() {
           </Section>
 
           <Section>
-            <h2 className="text-xl font-bold mb-4">All Projects</h2>
+            <h2 className="text-xl font-bold mb-4">All Projects (drag to reorder)</h2>
             {loading ? (
               <p>Loading...</p>
             ) : siteData.projects.length === 0 ? (
               <p className="text-muted-foreground">No projects yet.</p>
             ) : (
               <div className="space-y-2">
-                {siteData.projects.map((project) => (
-                  <div key={project.id} className="flex items-center justify-between p-3 border rounded-md">
-                    <div>
-                      <p className="font-medium">{project.title}</p>
-                      <div className="flex gap-2 mt-1">
-                        <Badge className={`text-xs ${project.status === "completed" ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"}`}>
-                          {project.status === "completed" ? "Completed" : "Under Dev"}
-                        </Badge>
+                {siteData.projects.map((project, i) => (
+                  <div
+                    key={project.id}
+                    draggable
+                    onDragStart={e => { e.dataTransfer.setData("text/plain", i.toString()); (e.currentTarget as HTMLElement).classList.add("opacity-50"); }}
+                    onDragOver={e => { e.preventDefault(); e.currentTarget.classList.add("border-blue-500"); }}
+                    onDragLeave={e => { e.currentTarget.classList.remove("border-blue-500"); }}
+                    onDrop={e => {
+                      e.preventDefault();
+                      e.currentTarget.classList.remove("border-blue-500");
+                      const fromIdx = parseInt(e.dataTransfer.getData("text/plain"));
+                      const toIdx = i;
+                      if (fromIdx === toIdx) return;
+                      const updated = [...siteData.projects];
+                      const [moved] = updated.splice(fromIdx, 1);
+                      updated.splice(toIdx, 0, moved);
+                      saveSiteData({ ...siteData, projects: updated });
+                    }}
+                    className="flex items-center justify-between p-3 border rounded-md cursor-grab active:cursor-grabbing"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-muted-foreground cursor-grab">⠿</span>
+                      <div>
+                        <p className="font-medium">{project.title}</p>
+                        <div className="flex gap-2 mt-1">
+                          <Badge className={`text-xs ${project.status === "completed" ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"}`}>
+                            {project.status === "completed" ? "Completed" : "Under Dev"}
+                          </Badge>
+                        </div>
                       </div>
                     </div>
                     <div className="flex gap-2">
@@ -451,7 +489,7 @@ export default function AdminPage() {
                         <option value="completed">Completed</option>
                         <option value="under-development">Under Dev</option>
                       </select>
-                      <Button size="sm" variant="outline" onClick={() => { setEditingProject(project.id!); setProjectForm({ title: project.title, description: project.description, techStack: project.techStack.join(", "), linkLabel: project.link?.label || "", linkHref: project.link?.href || "", status: project.status }); }}>Edit</Button>
+                      <Button size="sm" variant="outline" onClick={() => { setEditingProject(project.id!); setProjectForm({ title: project.title, description: project.description, techStack: project.techStack.join(", "), linkLabel: project.link?.label || "", linkHref: project.link?.href || "", deployLink: project.deployLink || "", status: project.status }); }}>Edit</Button>
                       <Button size="sm" variant="destructive" onClick={() => saveSiteData({ ...siteData, projects: siteData.projects.filter(p => p.id !== project.id) })}>Delete</Button>
                     </div>
                   </div>
@@ -460,6 +498,70 @@ export default function AdminPage() {
             )}
           </Section>
         </>
+      )}
+
+      {/* ===== PUBLICATIONS TAB ===== */}
+      {tab === "publications" && (
+        <Section>
+          <Card>
+            <CardHeader><CardTitle>Add Publication</CardTitle></CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label>Title</Label>
+                  <Input placeholder="Paper title" id="pub-title" />
+                </div>
+                <div className="space-y-2">
+                  <Label>Authors</Label>
+                  <Input placeholder="Author names" id="pub-authors" />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Date</Label>
+                    <Input type="date" id="pub-date" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Link URL</Label>
+                    <Input placeholder="https://..." id="pub-link" />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label>Description (optional)</Label>
+                  <textarea className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm" rows={2} id="pub-desc" />
+                </div>
+                <Button onClick={() => {
+                  const title = (document.getElementById("pub-title") as HTMLInputElement).value;
+                  const authors = (document.getElementById("pub-authors") as HTMLInputElement).value;
+                  const date = (document.getElementById("pub-date") as HTMLInputElement).value;
+                  const linkUrl = (document.getElementById("pub-link") as HTMLInputElement).value;
+                  const desc = (document.getElementById("pub-desc") as HTMLTextAreaElement).value;
+                  if (!title || !authors || !date) return;
+                  const pub: Publication = { title, authors, date, description: desc || undefined };
+                  if (linkUrl) pub.link = { label: "Link", href: linkUrl };
+                  saveSiteData({ ...siteData, publications: [...siteData.publications, pub] });
+                  (document.getElementById("pub-title") as HTMLInputElement).value = "";
+                  (document.getElementById("pub-authors") as HTMLInputElement).value = "";
+                  (document.getElementById("pub-date") as HTMLInputElement).value = "";
+                  (document.getElementById("pub-link") as HTMLInputElement).value = "";
+                  (document.getElementById("pub-desc") as HTMLTextAreaElement).value = "";
+                }}>Add Publication</Button>
+              </div>
+            </CardContent>
+          </Card>
+          <div className="mt-4 space-y-2">
+            {siteData.publications.map((pub, i) => (
+              <div key={i} className="flex items-center justify-between p-3 border rounded-md">
+                <div>
+                  <p className="font-medium">{pub.title}</p>
+                  <p className="text-xs text-muted-foreground">{pub.authors} — {pub.date}</p>
+                </div>
+                <div className="flex gap-2">
+                  <Button size="sm" variant="destructive" onClick={() => saveSiteData({ ...siteData, publications: siteData.publications.filter((_, j) => j !== i) })}>Delete</Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Section>
       )}
 
       {/* ===== MESSAGES TAB ===== */}

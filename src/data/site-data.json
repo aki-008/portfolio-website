@@ -1,9 +1,9 @@
 {
   "profile": {
-    "name": "あき [Aki]",
+    "name": "Shaswat singh",
     "initials": "Ak",
     "about": "I'm a Shaswat Singh. Love me some art  q(≧▽≦q) and SWE . Currently learning  日本語, Eager to learn new things !",
-    "summary": "I like to make stuff that I want or like . Mostly code that miraculously runs (on a good day). Occasionally I draw. Frequently distracted by knowledge. Ping me! Let's colab or just chat.",
+    "summary": "I like to make stuff that I want or like . Mostly code that miraculously runs (on a good day). Occasionally I draw. Frequently distracted by knowledge. Ping me! Let's Collab or just chat.",
     "avatarUrl": "https://media.tenor.com/YrR48WQtTQEAAAAi/hamchat-collection.gif",
     "personalWebsiteUrl": "https://portfolio-website-nu-pearl.vercel.app/",
     "email": "shaswatsingh910@gmail.com",
@@ -24,6 +24,11 @@
       "name": "Discord",
       "url": "https://discord.gg/VbEpfqaX",
       "icon": "Discord"
+    },
+    {
+      "name": "Kaggle",
+      "url": "https://www.kaggle.com/singh008",
+      "icon": "https://www.kaggle.com/static/images/site-logo.svg"
     }
   ],
   "skills": [
@@ -67,7 +72,8 @@
       "items": [
         "Chromadb",
         "Qdrant",
-        "Sqlite"
+        "Sqlite",
+        "Postgresql"
       ]
     },
     {
@@ -78,7 +84,10 @@
         "Blender",
         "Wezterm",
         "Ollama",
-        "Postman"
+        "Postman",
+        "termux",
+        "SSH",
+        "tailscale"
       ]
     },
     {
@@ -98,23 +107,26 @@
     "Drawing",
     "Anime",
     "Manga",
-    "Gaming"
+    "Gaming",
+    "Tinkering"
   ],
   "projects": [
     {
-      "id": "vllm-podium",
-      "title": "vLLM-Podium",
-      "description": "A self-contained setup for hosting a vLLM inference server on Kaggle, exposing it via ngrok, and connecting to it locally for experimentation.",
+      "id": "prepai",
+      "title": "PrepAI",
+      "description": "Prep AI is a comprehensive, all-in-one AI platform designed to help job seekers and professionals master interview skills and deepen their subject knowledge.",
       "techStack": [
-        "Python",
-        "vLLM",
-        "Jupyter Notebook",
-        "ngrok",
-        "Kaggle"
+        "FastAPI",
+        "ChromaDB",
+        "Vapi",
+        "Groq/OpenAI",
+        "React + TypeScript + Vite",
+        "PostgreSQL",
+        "LlamaIndex"
       ],
       "link": {
-        "label": "GitHub Repository",
-        "href": "https://github.com/aki-008/vLLM-Podium"
+        "label": "Link",
+        "href": "https://github.com/aki-008/prepAI"
       },
       "status": "completed"
     },
@@ -157,6 +169,40 @@
       "status": "completed"
     },
     {
+      "id": "1779301791024",
+      "title": "Reasoning-Focused SLM Fine-Tuning",
+      "description": "This project focuses on fine-tuning a Small Language Model (SLM) for structured reasoning to perform Root Cause Analysis (RCA) on 5G/LTE drive-test telelogs.\n\nThe goal is not just to predict the correct root cause, but to reason like a telecom RF engineer — step by step, using evidence from user-plane KPIs, mobility behavior, and engineering parameters.",
+      "techStack": [
+        "Python",
+        "Pandas",
+        "OpenAI SDK",
+        "Jupyter Notebook",
+        "GPT-OSS-120B",
+        "SLM Fine-Tuning",
+        "Supervised Fine-Tuning (SFT)",
+        "Prompt Engineering",
+        "Reasoning Trace Generation",
+        "Cerebras API",
+        "Groq API",
+        "5G NR",
+        "LTE",
+        "Telecom RCA",
+        "RF Engineering Analytics",
+        "CSV Processing",
+        "Structured Reasoning",
+        "Unsloth",
+        "TRL",
+        "Batch Inference Pipeline",
+        "Streaming Inference",
+        "Teacher-Student Distillation"
+      ],
+      "link": {
+        "label": "Link",
+        "href": "https://github.com/aki-008/Zindi-Rac-teleco-"
+      },
+      "status": "completed"
+    },
+    {
       "id": "csvision",
       "title": "CSVision",
       "description": "CSVision is a web-based tool that allows users to analyze CSV datasets using AI-powered natural language queries.",
@@ -168,6 +214,23 @@
       "link": {
         "label": "GitHub Repository",
         "href": "https://github.com/aki-008/CSVision"
+      },
+      "status": "completed"
+    },
+    {
+      "id": "vllm-podium",
+      "title": "vLLM-Podium",
+      "description": "A self-contained setup for hosting a vLLM inference server on Kaggle, exposing it via ngrok, and connecting to it locally for experimentation.",
+      "techStack": [
+        "Python",
+        "vLLM",
+        "Jupyter Notebook",
+        "ngrok",
+        "Kaggle"
+      ],
+      "link": {
+        "label": "GitHub Repository",
+        "href": "https://github.com/aki-008/vLLM-Podium"
       },
       "status": "completed"
     },
@@ -292,38 +355,7 @@
         "href": "https://github.com/aki-008/RealState_price_prediction"
       },
       "status": "completed"
-    },
-    {
-      "id": "prepai",
-      "title": "PrepAI",
-      "description": "Prep AI is a comprehensive, all-in-one AI platform designed to help job seekers and professionals master interview skills and deepen their subject knowledge.",
-      "techStack": [
-        "FastAPI",
-        "ChromaDB",
-        "Vapi",
-        "Groq/OpenAI",
-        "React + TypeScript + Vite",
-        "PostgreSQL",
-        "LlamaIndex"
-      ],
-      "link": {
-        "label": "Link",
-        "href": "https://github.com/aki-008/prepAI"
-      },
-      "status": "completed"
-    },
-    {
-      "id": "arxplorer",
-      "title": "Arxplorer",
-      "description": "Research paper exploration tool",
-      "techStack": [
-        "Python"
-      ],
-      "link": {
-        "label": "GitHub Repository",
-        "href": "https://github.com/aki-008/Arxplorer"
-      },
-      "status": "under-development"
     }
-  ]
+  ],
+  "publications": []
 }
