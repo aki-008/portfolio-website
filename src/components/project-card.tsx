@@ -20,7 +20,7 @@ interface Props {
 
 export function ProjectCard({ title, description, tags, link, deployLink, cardBg, cardText, cardBorder }: Props) {
   return (
-    <Card className="flex flex-col overflow-hidden border rounded-lg p-3"
+    <Card className="flex flex-col border rounded-lg p-3 transition-all duration-300 ease-in-out min-h-[230px] max-h-[230px] hover:max-h-[800px] overflow-hidden hover:overflow-visible hover:scale-[1.03] hover:z-10 hover:shadow-xl group"
       style={{
         backgroundColor: cardBg,
         color: cardText,
@@ -56,7 +56,7 @@ export function ProjectCard({ title, description, tags, link, deployLink, cardBg
           <div className="hidden font-mono text-xs underline print:visible">
             {link?.replace("https://", "").replace("www.", "").replace("/", "")}
           </div>
-          <CardDescription className="font-mono text-xs">
+          <CardDescription className="font-mono text-xs line-clamp-3 group-hover:line-clamp-none">
             {description}
           </CardDescription>
         </div>
