@@ -248,14 +248,21 @@ export default function Page() {
                 const cardText = darkMode ? (d.themeColors?.dark?.cardText || "#f9fafb") : (d.themeColors?.light?.cardText || "#000000");
                 const cardBorder = darkMode ? (d.themeColors?.dark?.border || "#1f2937") : (d.themeColors?.light?.border || "#e5e7eb");
                 return (
-                <Card key={i} style={{ backgroundColor: cardBg, color: cardText, borderColor: cardBorder }} className="border p-3 transition-all duration-300 ease-in-out min-h-[150px] max-h-[150px] hover:max-h-[800px] overflow-hidden hover:overflow-visible hover:scale-[1.02] hover:z-10 hover:shadow-xl group">
+                <Card key={i} style={{ backgroundColor: cardBg, color: cardText, borderColor: cardBorder }} className="border p-3 group">
                   <CardHeader>
                     <div className="flex justify-between items-start gap-4">
-                      <div>
-                        <CardTitle className="text-base">
-                          {pub.link ? (
-                            <a href={pub.link.href} target="_blank" className="hover:underline">{pub.title}</a>
-                          ) : pub.title}
+                      <div className="flex-1">
+                        <CardTitle className="text-base flex items-center gap-2">
+                          {pub.title}
+                          {pub.link && (
+                            <a href={pub.link.href} target="_blank" className="inline-flex hover:opacity-70">
+                              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                <polyline points="15 3 21 3 21 9"/>
+                                <line x1="10" y1="14" x2="21" y2="3"/>
+                              </svg>
+                            </a>
+                          )}
                         </CardTitle>
                         <p className="text-sm mt-1" style={{ color: cardText, opacity: 0.7 }}>{pub.authors}</p>
                         <p className="text-xs" style={{ color: cardText, opacity: 0.5 }}>{pub.date}</p>
