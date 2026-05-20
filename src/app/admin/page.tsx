@@ -48,6 +48,7 @@ interface SiteData {
     light: { bg: string; text: string; border: string };
     dark: { bg: string; text: string; border: string };
   };
+  hiddenSections?: string[];
 }
 
 interface Message {
@@ -66,13 +67,14 @@ const defaultSiteData: SiteData = {
   interests: [],
   projects: [],
   publications: [],
+  hiddenSections: [],
 };
 
 export default function AdminPage() {
   const { data: session, status } = useSession();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [tab, setTab] = useState<"profile" | "social" | "skills" | "interests" | "projects" | "publications" | "colors" | "messages">("projects");
+  const [tab, setTab] = useState<"profile" | "social" | "skills" | "interests" | "projects" | "publications" | "colors" | "sections" | "messages">("projects");
 
   const [siteData, setSiteData] = useState<SiteData>(defaultSiteData);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -100,6 +102,7 @@ export default function AdminPage() {
 
   // Publication form
   const [pubForm, setPubForm] = useState({ title: "", authors: "", date: "", linkUrl: "", description: "" });
+  const [pubMsg, setPubMsg] = useState("");
 
   // Theme form
   const [themeColors, setThemeColors] = useState<{ light: { bg: string; text: string; border: string }; dark: { bg: string; text: string; border: string } } | null>(null);
@@ -169,6 +172,7 @@ export default function AdminPage() {
     { key: "projects", label: "Projects" },
     { key: "publications", label: "Publications" },
     { key: "colors", label: "Colors" },
+    { key: "sections", label: "Sections" },
     { key: "messages", label: `Messages (${messages.length})` },
   ] as const;
 
@@ -543,14 +547,18 @@ export default function AdminPage() {
                 </div>
                 <div className="flex gap-2">
                   <Button onClick={() => {
-                    if (!pubForm.title || !pubForm.authors || !pubForm.date) return;
-                    const pub: Publication = { title: pubForm.title, authors: pubForm.authors, date: pubForm.date, description: pubForm.description || undefined };
-                    if (pubForm.linkUrl) pub.link = { label: "Link", href: pubForm.linkUrl };
-                    saveSiteData({ ...siteData, publications: [...siteData.publications, pub] });
+                    if (!pubForm.title) { setPubMsg("Title required"); return; }
+                    if (!pubForm.authors) { setPubMsg("Authors required"); return; }
+                    if (!pubForm.date) { setPubMsg("Date required"); return; }
+                    setPubMsg("");
+                    const newPubs = [...siteData.publications, { title: pubForm.title, authors: pubForm.authors, date: pubForm.date, description: pubForm.description || undefined, ...(pubForm.linkUrl ? { link: { label: "Link", href: pubForm.linkUrl } } : {}) }];
+                    setSiteData(prev => ({ ...prev, publications: newPubs }));
+                    saveSiteData({ ...siteData, publications: newPubs });
                     setPubForm({ title: "", authors: "", date: "", linkUrl: "", description: "" });
                   }}>Add Publication</Button>
                   {siteData.publications.length > 0 && <Button variant="outline" onClick={() => setPubForm({ title: "", authors: "", date: "", linkUrl: "", description: "" })}>Clear</Button>}
                 </div>
+                {pubMsg && <p className="text-sm text-destructive">{pubMsg}</p>}
               </div>
             </CardContent>
           </Card>
@@ -651,6 +659,46 @@ export default function AdminPage() {
               </div>
               <div className="mt-4 pt-4 border-t">
                 <Button variant="outline" onClick={() => saveSiteData({ ...siteData, themeColors: undefined })}>Reset to Default</Button>
+              </div>
+            </CardContent>
+          </Card>
+        </Section>
+      )}
+
+      {/* ===== SECTIONS TAB ===== */}
+      {tab === "sections" && (
+        <Section>
+          <Card>
+            <CardHeader><CardTitle>Section Visibility</CardTitle></CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground mb-4">Toggle sections on/off. Hidden sections won&apos;t appear on the portfolio.</p>
+              <div className="space-y-3">
+                {[
+                  { key: "about", label: "About" },
+                  { key: "skills", label: "Skills" },
+                  { key: "interests", label: "Interests" },
+                  { key: "publications", label: "Publications" },
+                  { key: "projects", label: "Projects" },
+                  { key: "underDevelopment", label: "Under Development Projects" },
+                ].map(s => (
+                  <div key={s.key} className="flex items-center justify-between p-3 border rounded-md">
+                    <span className="font-medium">{s.label}</span>
+                    <Button
+                      size="sm"
+                      variant={siteData.hiddenSections?.includes(s.key) ? "outline" : "default"}
+                      onClick={() => {
+                        const hidden = siteData.hiddenSections || [];
+                        const isHidden = hidden.includes(s.key);
+                        const updated = isHidden
+                          ? hidden.filter(h => h !== s.key)
+                          : [...hidden, s.key];
+                        saveSiteData({ ...siteData, hiddenSections: updated });
+                      }}
+                    >
+                      {siteData.hiddenSections?.includes(s.key) ? "Hidden" : "Visible"}
+                    </Button>
+                  </div>
+                ))}
               </div>
             </CardContent>
           </Card>

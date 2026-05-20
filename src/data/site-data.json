@@ -28,7 +28,7 @@
     {
       "name": "Kaggle",
       "url": "https://www.kaggle.com/singh008",
-      "icon": "https://www.kaggle.com/static/images/site-logo.svg"
+      "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQocgnR9Y_Aq33mYH-oARaN0iIEEb96TllMTQ&s"
     }
   ],
   "skills": [
@@ -357,17 +357,28 @@
       "status": "completed"
     }
   ],
-  "publications": [],
+  "publications": [
+    {
+      "title": "Accident_GPT",
+      "authors": " Rimsha Saleem, Shaswat Singh,  Mohammed Abdul Qadeer",
+      "date": "2026-05-20",
+      "link": {
+        "label": "Link",
+        "href": "https://github.com/aki-008/Docs/blob/main/Accident%20GPT%20rewrite.pdf"
+      }
+    }
+  ],
   "themeColors": {
     "light": {
-      "bg": "#f4ebeb",
+      "bg": "#c8a3a3",
       "text": "#000000",
       "border": "#e5e7eb"
     },
     "dark": {
-      "bg": "#504e4e",
+      "bg": "#3b3a3a",
       "text": "#f9fafb",
       "border": "#1f2937"
     }
-  }
+  },
+  "hiddenSections": []
 }

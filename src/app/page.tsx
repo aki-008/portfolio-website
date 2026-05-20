@@ -56,6 +56,7 @@ interface SiteData {
     light: { bg: string; text: string; border: string };
     dark: { bg: string; text: string; border: string };
   };
+  hiddenSections?: string[];
 }
 
 export default function Page() {
@@ -77,6 +78,7 @@ export default function Page() {
       light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb" },
       dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937" },
     },
+    hiddenSections: [],
   };
 
   useEffect(() => {
@@ -119,13 +121,7 @@ export default function Page() {
       >
         {darkMode ? <SunIcon className="h-6 w-6" /> : <MoonIcon className="h-6 w-6" />}
       </button>
-      <section
-        className="mx-auto w-full max-w-5xl space-y-8 print:space-y-6"
-        style={{
-          backgroundColor: darkMode ? (d.themeColors?.dark?.bg || "#000000") : (d.themeColors?.light?.bg || "#ffffff"),
-          color: darkMode ? (d.themeColors?.dark?.text || "#f9fafb") : (d.themeColors?.light?.text || "#000000"),
-        }}
-      >
+      <section className="mx-auto w-full max-w-5xl space-y-8 print:space-y-6">
         <div className="flex items-start justify-between">
           <div className="flex-1 space-y-1.5">
             <h1 className="text-2xl font-bold dark:text-white">{d.profile.name}</h1>
@@ -187,12 +183,15 @@ export default function Page() {
             <AvatarFallback>{d.profile.initials}</AvatarFallback>
           </Avatar>
         </div>
+        {(!d.hiddenSections?.includes("about")) && (
         <Section>
           <h2 className="text-xl font-bold dark:text-white">About</h2>
           <p className="text-pretty font-mono text-sm text-muted-foreground dark:text-gray-400 w-full max-w-[105ch]">
             {d.profile.summary}
           </p>
         </Section>
+        )}
+        {(!d.hiddenSections?.includes("skills")) && (
         <Section>
           <h2 className="text-xl font-bold dark:text-white">Skills</h2>
           <div className="space-y-2">
@@ -213,6 +212,8 @@ export default function Page() {
             ))}
           </div>
         </Section>
+        )}
+        {(!d.hiddenSections?.includes("interests")) && (
         <Section>
           <h2 className="print-force-new-page text-xl font-bold dark:text-white">Interests</h2>
           <div className="flex flex-wrap gap-1.5 mt-1">
@@ -228,7 +229,8 @@ export default function Page() {
             })}
           </div>
         </Section>
-        {d.publications.length > 0 && (
+        )}
+        {d.publications.length > 0 && !d.hiddenSections?.includes("publications") && (
           <Section>
             <h2 className="text-xl font-bold dark:text-white">Publications</h2>
             <div className="space-y-4">
@@ -257,6 +259,7 @@ export default function Page() {
             </div>
           </Section>
         )}
+        {(!d.hiddenSections?.includes("projects")) && (
         <Section className="scroll-mb-16">
           <h2 className="text-xl font-bold dark:text-white">Projects</h2>
           <div className="-mx-3 grid grid-cols-1 gap-3 print:grid-cols-3 print:gap-2 md:grid-cols-2 lg:grid-cols-3">
@@ -278,6 +281,8 @@ export default function Page() {
             )}
           </div>
         </Section>
+        )}
+        {(!d.hiddenSections?.includes("underDevelopment") && underDevProjects.length > 0) && (
         <Section className="scroll-mb-16">
           <h2 className="text-xl font-bold dark:text-white">Under Development Projects</h2>
           <div className="-mx-3 grid grid-cols-1 gap-3 print:grid-cols-3 print:gap-2 md:grid-cols-2 lg:grid-cols-3">
@@ -299,6 +304,7 @@ export default function Page() {
             )}
           </div>
         </Section>
+        )}
         <ContactForm />
       </section>
       <CommandMenu
