@@ -267,49 +267,66 @@ export default function Page() {
         {d.achievements.length > 0 && !d.hiddenSections?.includes("achievements") && (
           <Section>
             <h2 className="text-xl font-bold dark:text-white">Achievements</h2>
-            <div className="space-y-3">
-              {d.achievements.map((a, i) => (
-                <div key={i} className="p-3 border rounded-lg" style={{ backgroundColor: darkMode ? d.themeColors?.dark?.cardBg : d.themeColors?.light?.cardBg, borderColor: darkMode ? d.themeColors?.dark?.border : d.themeColors?.light?.border }}>
-                  <h3 className="font-semibold text-base">{a.heading}</h3>
-                  <p className="text-sm mt-1" style={{ opacity: 0.8 }}>{a.description}</p>
-                  {a.link && (
-                    <a href={a.link.href} target="_blank" className="text-sm inline-flex items-center gap-1 mt-1 hover:underline" style={{ opacity: 0.7 }}>
-                      {a.link.label || "Link"}
-                      <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                        <polyline points="15 3 21 3 21 9"/>
-                        <line x1="10" y1="14" x2="21" y2="3"/>
-                      </svg>
-                    </a>
-                  )}
-                </div>
-              ))}
+            <div className="-mx-3 space-y-3">
+              {d.achievements.map((a, i) => {
+                const cardBg = darkMode ? (d.themeColors?.dark?.cardBg || "#111111") : (d.themeColors?.light?.cardBg || "#f9fafb");
+                const cardText = darkMode ? (d.themeColors?.dark?.cardText || "#f9fafb") : (d.themeColors?.light?.cardText || "#000000");
+                const cardBorder = darkMode ? (d.themeColors?.dark?.border || "#1f2937") : (d.themeColors?.light?.border || "#e5e7eb");
+                return (
+                <Card key={i} style={{ backgroundColor: cardBg, color: cardText, borderColor: cardBorder }} className="border p-3">
+                  <CardHeader>
+                    <CardTitle className="text-base">{a.heading}</CardTitle>
+                    {a.description && <p className="text-sm mt-1" style={{ color: cardText, opacity: 0.7 }}>{a.description}</p>}
+                    {a.link && (
+                      <a href={a.link.href} target="_blank" className="text-sm inline-flex items-center gap-1 mt-1 hover:underline" style={{ color: cardText, opacity: 0.7 }}>
+                        {a.link.label || "Link"}
+                        <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                          <polyline points="15 3 21 3 21 9"/>
+                          <line x1="10" y1="14" x2="21" y2="3"/>
+                        </svg>
+                      </a>
+                    )}
+                  </CardHeader>
+                </Card>
+                );
+              })}
             </div>
           </Section>
         )}
         {d.education.length > 0 && !d.hiddenSections?.includes("education") && (
           <Section>
             <h2 className="text-xl font-bold dark:text-white">Education</h2>
-            <div className="space-y-3">
-              {d.education.map((e, i) => (
-                <div key={i} className="p-3 border rounded-lg" style={{ backgroundColor: darkMode ? d.themeColors?.dark?.cardBg : d.themeColors?.light?.cardBg, borderColor: darkMode ? d.themeColors?.dark?.border : d.themeColors?.light?.border }}>
-                  <h3 className="font-semibold text-base">{e.course}</h3>
-                  <p className="text-sm mt-1" style={{ opacity: 0.8 }}>{e.school} — {e.duration}</p>
-                  {e.coursework && <p className="text-xs mt-1" style={{ opacity: 0.6 }}>Coursework: {e.coursework}</p>}
-                  {e.gpa && <p className="text-xs mt-1" style={{ opacity: 0.6 }}>GPA: {e.gpa}</p>}
-                </div>
-              ))}
+            <div className="-mx-3 space-y-3">
+              {d.education.map((e, i) => {
+                const cardBg = darkMode ? (d.themeColors?.dark?.cardBg || "#111111") : (d.themeColors?.light?.cardBg || "#f9fafb");
+                const cardText = darkMode ? (d.themeColors?.dark?.cardText || "#f9fafb") : (d.themeColors?.light?.cardText || "#000000");
+                const cardBorder = darkMode ? (d.themeColors?.dark?.border || "#1f2937") : (d.themeColors?.light?.border || "#e5e7eb");
+                return (
+                <Card key={i} style={{ backgroundColor: cardBg, color: cardText, borderColor: cardBorder }} className="border p-3">
+                  <CardHeader>
+                    <CardTitle className="text-base">{e.course}</CardTitle>
+                    <p className="text-sm mt-1" style={{ color: cardText, opacity: 0.7 }}>{e.school} — {e.duration}</p>
+                    {e.coursework && <p className="text-xs mt-1" style={{ color: cardText, opacity: 0.5 }}>Coursework: {e.coursework}</p>}
+                    {e.gpa && <p className="text-xs mt-1" style={{ color: cardText, opacity: 0.5 }}>GPA: {e.gpa}</p>}
+                  </CardHeader>
+                </Card>
+                );
+              })}
             </div>
           </Section>
         )}
         {d.certificates.length > 0 && !d.hiddenSections?.includes("certificates") && (
           <Section>
             <h2 className="text-xl font-bold dark:text-white">Certificates</h2>
-            <div className="flex flex-wrap gap-2">
-              {d.certificates.map((c, i) => (
-                c.link ? (
-                  <a key={i} href={c.link.href} target="_blank" className="inline-flex items-center gap-1.5 p-2 border rounded-lg text-sm hover:underline"
-                    style={{ backgroundColor: darkMode ? d.themeColors?.dark?.cardBg : d.themeColors?.light?.cardBg, borderColor: darkMode ? d.themeColors?.dark?.border : d.themeColors?.light?.border }}>
+            <div className="-mx-3 flex flex-wrap gap-3">
+              {d.certificates.map((c, i) => {
+                const cardBg = darkMode ? (d.themeColors?.dark?.cardBg || "#111111") : (d.themeColors?.light?.cardBg || "#f9fafb");
+                const cardText = darkMode ? (d.themeColors?.dark?.cardText || "#f9fafb") : (d.themeColors?.light?.cardText || "#000000");
+                const cardBorder = darkMode ? (d.themeColors?.dark?.border || "#1f2937") : (d.themeColors?.light?.border || "#e5e7eb");
+                return c.link ? (
+                  <a key={i} href={c.link.href} target="_blank" className="inline-flex items-center gap-1.5 p-3 border rounded-lg text-sm hover:underline"
+                    style={{ backgroundColor: cardBg, color: cardText, borderColor: cardBorder }}>
                     {c.name}
                     <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
@@ -318,12 +335,12 @@ export default function Page() {
                     </svg>
                   </a>
                 ) : (
-                  <span key={i} className="inline-flex p-2 border rounded-lg text-sm"
-                    style={{ backgroundColor: darkMode ? d.themeColors?.dark?.cardBg : d.themeColors?.light?.cardBg, borderColor: darkMode ? d.themeColors?.dark?.border : d.themeColors?.light?.border }}>
+                  <span key={i} className="inline-flex p-3 border rounded-lg text-sm"
+                    style={{ backgroundColor: cardBg, color: cardText, borderColor: cardBorder }}>
                     {c.name}
                   </span>
-                )
-              ))}
+                );
+              })}
             </div>
           </Section>
         )}
