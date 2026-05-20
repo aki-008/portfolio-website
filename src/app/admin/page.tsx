@@ -105,7 +105,7 @@ export default function AdminPage() {
   const [pubMsg, setPubMsg] = useState("");
 
   // Theme form
-  const [themeColors, setThemeColors] = useState<{ light: { bg: string; text: string; border: string }; dark: { bg: string; text: string; border: string } } | null>(null);
+  const [previewColors, setPreviewColors] = useState<{ light: { bg: string; text: string; border: string }; dark: { bg: string; text: string; border: string } } | null>(null);
   const [editingProject, setEditingProject] = useState<string | null>(null);
 
   const fetchData = async () => {
@@ -113,6 +113,7 @@ export default function AdminPage() {
     const data = await res.json();
     setSiteData(data);
     setProfile(data.profile);
+    setPreviewColors(data.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937" } });
     setLoading(false);
   };
 
@@ -584,81 +585,39 @@ export default function AdminPage() {
           <Card>
             <CardHeader><CardTitle>Theme Colors</CardTitle></CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">Set colors for light and dark modes. Changes apply instantly on the main page.</p>
+              <p className="text-sm text-muted-foreground mb-4">Pick colors for light and dark modes. Press Save to apply.</p>
               <div className="grid grid-cols-2 gap-6">
                 <div>
                   <h3 className="font-semibold mb-3">Light Mode</h3>
                   <div className="space-y-3">
-                    <div className="space-y-1">
-                      <Label>Background</Label>
-                      <input type="color" className="w-full h-10 rounded cursor-pointer"
-                        value={siteData.themeColors?.light?.bg || "#ffffff"}
-                        onChange={e => {
-                          const updated = { ...siteData, themeColors: { ...(siteData.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937" } }), light: { ...((siteData.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937" } }).light), bg: e.target.value } } };
-                          setThemeColors(updated.themeColors);
-                          saveSiteData(updated);
-                        }} />
-                    </div>
-                    <div className="space-y-1">
-                      <Label>Text</Label>
-                      <input type="color" className="w-full h-10 rounded cursor-pointer"
-                        value={siteData.themeColors?.light?.text || "#000000"}
-                        onChange={e => {
-                          const updated = { ...siteData, themeColors: { ...(siteData.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937" } }), light: { ...((siteData.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937" } }).light), text: e.target.value } } };
-                          setThemeColors(updated.themeColors);
-                          saveSiteData(updated);
-                        }} />
-                    </div>
-                    <div className="space-y-1">
-                      <Label>Border</Label>
-                      <input type="color" className="w-full h-10 rounded cursor-pointer"
-                        value={siteData.themeColors?.light?.border || "#e5e7eb"}
-                        onChange={e => {
-                          const updated = { ...siteData, themeColors: { ...(siteData.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937" } }), light: { ...((siteData.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937" } }).light), border: e.target.value } } };
-                          setThemeColors(updated.themeColors);
-                          saveSiteData(updated);
-                        }} />
-                    </div>
+                    {(["bg", "text", "border"] as const).map(field => (
+                      <div key={field} className="space-y-1">
+                        <Label>{field === "bg" ? "Background" : field === "text" ? "Text" : "Border"}</Label>
+                        <input type="color" className="w-full h-10 rounded cursor-pointer"
+                          value={previewColors?.light?.[field] || "#ffffff"}
+                          onChange={e => setPreviewColors(prev => prev ? { ...prev, light: { ...prev.light, [field]: e.target.value } } : prev)} />
+                      </div>
+                    ))}
                   </div>
                 </div>
                 <div>
                   <h3 className="font-semibold mb-3">Dark Mode</h3>
                   <div className="space-y-3">
-                    <div className="space-y-1">
-                      <Label>Background</Label>
-                      <input type="color" className="w-full h-10 rounded cursor-pointer"
-                        value={siteData.themeColors?.dark?.bg || "#000000"}
-                        onChange={e => {
-                          const updated = { ...siteData, themeColors: { ...(siteData.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937" } }), dark: { ...((siteData.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937" } }).dark), bg: e.target.value } } };
-                          setThemeColors(updated.themeColors);
-                          saveSiteData(updated);
-                        }} />
-                    </div>
-                    <div className="space-y-1">
-                      <Label>Text</Label>
-                      <input type="color" className="w-full h-10 rounded cursor-pointer"
-                        value={siteData.themeColors?.dark?.text || "#f9fafb"}
-                        onChange={e => {
-                          const updated = { ...siteData, themeColors: { ...(siteData.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937" } }), dark: { ...((siteData.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937" } }).dark), text: e.target.value } } };
-                          setThemeColors(updated.themeColors);
-                          saveSiteData(updated);
-                        }} />
-                    </div>
-                    <div className="space-y-1">
-                      <Label>Border</Label>
-                      <input type="color" className="w-full h-10 rounded cursor-pointer"
-                        value={siteData.themeColors?.dark?.border || "#1f2937"}
-                        onChange={e => {
-                          const updated = { ...siteData, themeColors: { ...(siteData.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937" } }), dark: { ...((siteData.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937" } }).dark), border: e.target.value } } };
-                          setThemeColors(updated.themeColors);
-                          saveSiteData(updated);
-                        }} />
-                    </div>
+                    {(["bg", "text", "border"] as const).map(field => (
+                      <div key={field} className="space-y-1">
+                        <Label>{field === "bg" ? "Background" : field === "text" ? "Text" : "Border"}</Label>
+                        <input type="color" className="w-full h-10 rounded cursor-pointer"
+                          value={previewColors?.dark?.[field] || "#000000"}
+                          onChange={e => setPreviewColors(prev => prev ? { ...prev, dark: { ...prev.dark, [field]: e.target.value } } : prev)} />
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
-              <div className="mt-4 pt-4 border-t">
-                <Button variant="outline" onClick={() => saveSiteData({ ...siteData, themeColors: undefined })}>Reset to Default</Button>
+              <div className="flex gap-3 mt-6">
+                <Button onClick={() => { saveSiteData({ ...siteData, themeColors: previewColors! }); }}>Save Colors</Button>
+                <Button variant="outline" onClick={() => setPreviewColors(siteData.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937" } })}>Cancel</Button>
+                <Button variant="ghost" size="sm" onClick={() => setPreviewColors({ light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937" } })}>Reset</Button>
               </div>
             </CardContent>
           </Card>

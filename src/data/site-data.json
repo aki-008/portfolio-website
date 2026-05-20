@@ -128,7 +128,8 @@
         "label": "Link",
         "href": "https://github.com/aki-008/prepAI"
       },
-      "status": "completed"
+      "status": "completed",
+      "deployLink": "https://huggingface.co/spaces/aki-008/prepAI"
     },
     {
       "id": "devecho",
@@ -370,14 +371,14 @@
   ],
   "themeColors": {
     "light": {
-      "bg": "#c8a3a3",
+      "bg": "#ebe5e5",
       "text": "#000000",
       "border": "#e5e7eb"
     },
     "dark": {
-      "bg": "#3b3a3a",
+      "bg": "#2e2e2e",
       "text": "#f9fafb",
-      "border": "#1f2937"
+      "border": "#2e2e2e"
     }
   },
   "hiddenSections": []

@@ -114,7 +114,12 @@ export default function Page() {
   const underDevProjects = d.projects.filter(p => p.status === "under-development");
 
   return (
-    <main className="container relative mx-auto scroll-my-12 overflow-auto p-4 print:p-12 md:p-16">
+    <main className="relative min-h-screen w-full overflow-auto p-4 print:p-12 md:p-16"
+      style={{
+        backgroundColor: darkMode ? (d.themeColors?.dark?.bg || "#000000") : (d.themeColors?.light?.bg || "#ffffff"),
+        color: darkMode ? (d.themeColors?.dark?.text || "#f9fafb") : (d.themeColors?.light?.text || "#000000"),
+      }}
+    >
       <button
         onClick={() => setDarkMode(!darkMode)}
         className="fixed top-4 right-4 p-2 bg-gray-800 text-white rounded-md dark:bg-gray-200 dark:text-gray-800 print:hidden"
