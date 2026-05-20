@@ -2,6 +2,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { Inter } from "next/font/google";
 
 import { RESUME_DATA } from "../data/resume-data";
+import { Providers } from "./providers";
 
 import "./globals.css";
 
@@ -23,7 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.className}>
       <body>
-        {children}
+        <Providers>{children}</Providers>
         <Analytics />
       </body>
     </html>

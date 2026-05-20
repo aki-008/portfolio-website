@@ -13,8 +13,20 @@ import { ProjectCard } from "../components/project-card";
 import { SunIcon, MoonIcon } from "lucide-react";
 import { ContactForm } from "../components/contact-form";
 
+interface Project {
+  id?: string;
+  title: string;
+  techStack: string[];
+  description: string;
+  logo?: string;
+  link?: { label: string; href: string };
+}
+
 export default function Page() {
   const [darkMode, setDarkMode] = useState(false);
+  const [projects, setProjects] = useState<Project[]>(RESUME_DATA.projects);
+  const [underDev, setUnderDev] = useState<Project[]>(RESUME_DATA.underDevelopment);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (darkMode) {
@@ -23,6 +35,17 @@ export default function Page() {
       document.documentElement.classList.remove('dark');
     }
   }, [darkMode]);
+
+  useEffect(() => {
+    fetch('/api/projects')
+      .then(res => res.json())
+      .then(data => {
+        if (data.projects) setProjects(data.projects);
+        if (data.underDevelopment) setUnderDev(data.underDevelopment);
+      })
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
     <main className="container relative mx-auto scroll-my-12 overflow-auto p-4 print:p-12 md:p-16">
@@ -138,35 +161,44 @@ export default function Page() {
         <Section className="scroll-mb-16">
           <h2 className="text-xl font-bold dark:text-white">Projects</h2>
           <div className="-mx-3 grid grid-cols-1 gap-3 print:grid-cols-3 print:gap-2 md:grid-cols-2 lg:grid-cols-3">
-            {RESUME_DATA.projects.map((project) => {
-              return (
-                <ProjectCard
-                  key={project.title}
-                  title={project.title}
-                  description={project.description}
-                  tags={project.techStack}
-                  link={"link" in project ? project.link.href : undefined}
-                />
-              );
-            })}
+            {loading ? (
+              <p className="text-muted-foreground font-mono text-sm">Loading...</p>
+            ) : (
+              projects.map((project) => {
+                return (
+                  <ProjectCard
+                    key={project.id || project.title}
+                    title={project.title}
+                    description={project.description}
+                    tags={project.techStack}
+                    link={project.link?.href}
+                  />
+                );
+              })
+            )}
           </div>
         </Section>
         <Section className="scroll-mb-16">
           <h2 className="text-xl font-bold dark:text-white">Under Development Projects</h2>
           <div className="-mx-3 grid grid-cols-1 gap-3 print:grid-cols-3 print:gap-2 md:grid-cols-2 lg:grid-cols-3">
-            {RESUME_DATA.underDevelopment.map((project) => {
-              return (
-                <ProjectCard
-                  key={project.title}
-                  title={project.title}
-                  description={project.description}
-                  tags={project.techStack}
-                  link={"link" in project ? project.link.href : undefined}
-                />
-              );
-            })}
+            {loading ? (
+              <p className="text-muted-foreground font-mono text-sm">Loading...</p>
+            ) : (
+              underDev.map((project) => {
+                return (
+                  <ProjectCard
+                    key={project.id || project.title}
+                    title={project.title}
+                    description={project.description}
+                    tags={project.techStack}
+                    link={project.link?.href}
+                  />
+                );
+              })
+            )}
           </div>
         </Section>
+        <ContactForm />
       </section>
       <CommandMenu
         links={[
@@ -178,9 +210,12 @@ export default function Page() {
             url: socilaMediaLink.url,
             title: socilaMediaLink.name,
           })),
+          {
+            url: "/admin",
+            title: "Admin (Owner Only)",
+          },
         ]}
       />
-    {/* <ContactForm /> */}
     </main>
   );
 }

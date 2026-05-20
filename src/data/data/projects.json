@@ -1,7 +1,13 @@
 [
   {
     "title": "vLLM-Podium",
-    "techStack": ["Python", "vLLM", "Jupyter Notebook", "ngrok", "Kaggle"],
+    "techStack": [
+      "Python",
+      "vLLM",
+      "Jupyter Notebook",
+      "ngrok",
+      "Kaggle"
+    ],
     "description": "A self-contained setup for hosting a vLLM inference server on Kaggle, exposing it via ngrok, and connecting to it locally for experimentation.",
     "logo": "",
     "link": {
@@ -11,7 +17,14 @@
   },
   {
     "title": "DevEcho",
-    "techStack": ["Python","fastapi", "LinkedIn API", "chromadb", "Langchain", "Telegram bot API"],
+    "techStack": [
+      "Python",
+      "fastapi",
+      "LinkedIn API",
+      "chromadb",
+      "Langchain",
+      "Telegram bot API"
+    ],
     "description": "DevEcho is an AI-powered social media agent designed to generate engaging LinkedIn posts based on user-provided content. It automates data collection, retrieval, and post-generation using AI-driven processes.",
     "logo": "",
     "link": {
@@ -19,9 +32,18 @@
       "href": "https://github.com/aki-008/DevEcho"
     }
   },
-    {
+  {
     "title": "GUARDIAN-EYE.AI",
-    "techStack": ["Python", "fastapi","uvicorn","Yolo", "ultralytics", "Computer Vision", "OpenCV", "Deep Learning"],
+    "techStack": [
+      "Python",
+      "fastapi",
+      "uvicorn",
+      "Yolo",
+      "ultralytics",
+      "Computer Vision",
+      "OpenCV",
+      "Deep Learning"
+    ],
     "description": "GUARDIAN EYE.AI provides an innovative solution for public safety in urban India, utilizing AI and computer vision to detect violence in real-time. This advanced technology enhances traditional surveillance methods.",
     "logo": "",
     "link": {
@@ -31,7 +53,11 @@
   },
   {
     "title": "CSVision",
-    "techStack": ["Python","Groq", "Llamaindex"],
+    "techStack": [
+      "Python",
+      "Groq",
+      "Llamaindex"
+    ],
     "description": "CSVision is a web-based tool that allows users to analyze CSV datasets using AI-powered natural language queries. It utilizes Groq's large language models to generate insights and visualizations.",
     "logo": "",
     "link": {
@@ -39,9 +65,15 @@
       "href": "https://github.com/aki-008/CSVision"
     }
   },
-    {
+  {
     "title": "Ollama-Hosting",
-    "techStack": ["Python", "Jupyter Notebook", "Ollama", "Kaggle", "ngrok"],
+    "techStack": [
+      "Python",
+      "Jupyter Notebook",
+      "Ollama",
+      "Kaggle",
+      "ngrok"
+    ],
     "description": "This project shows how to run Ollama on a weak computer using Kaggle for free GPU hosting, Ngrok for secure tunneling, and Open Web UI for interaction. It's a cost-effective, accessible solution for AI model hosting.",
     "logo": "",
     "link": {
@@ -51,8 +83,12 @@
   },
   {
     "title": "Wanderlust",
-    "techStack": ["Python", "groq", "chromadb", "Langchain"
-  ],
+    "techStack": [
+      "Python",
+      "groq",
+      "chromadb",
+      "Langchain"
+    ],
     "description": "Wanderlust is an AI-powered travel itinerary generator that helps users plan their trips effortlessly by asking a series of questions and generating personalized travel recommendations.",
     "logo": "",
     "link": {
@@ -60,10 +96,15 @@
       "href": "https://github.com/aki-008/Wanderlust"
     }
   },
-
   {
     "title": "Git_RAG",
-    "techStack": ["Python", "Langchain", "chromadb", "groq","Gitingest" ],
+    "techStack": [
+      "Python",
+      "Langchain",
+      "chromadb",
+      "groq",
+      "Gitingest"
+    ],
     "description": "This project provides a streamlined way to ingest GitHub repositories, process their contents, and use Retrieval-Augmented Generation (RAG) with a Language Model to answer questions about the code.",
     "logo": "",
     "link": {
@@ -71,9 +112,11 @@
       "href": "https://github.com/aki-008/Git_RAG"
     }
   },
-    {
+  {
     "title": "Excelcopilot",
-    "techStack": ["Python"],
+    "techStack": [
+      "Python"
+    ],
     "description": "Excel automation and assistance tool powered by AI",
     "logo": "",
     "link": {
@@ -83,7 +126,16 @@
   },
   {
     "title": "Letter_Gen",
-    "techStack": ["Python", "Jupyter Notebook", "NLP", "Pytorch", "Transformers", "peft", "Accelerate","TRL"],
+    "techStack": [
+      "Python",
+      "Jupyter Notebook",
+      "NLP",
+      "Pytorch",
+      "Transformers",
+      "peft",
+      "Accelerate",
+      "TRL"
+    ],
     "description": "Letter Generator is a powerful tool for creating professional letters. It uses a pre-trained model fine-tuned with formal letters to generate accurate and customized correspondence. Save time and ensure professionalism.",
     "logo": "",
     "link": {
@@ -93,7 +145,16 @@
   },
   {
     "title": "Titanic_dataset_challenge",
-    "techStack": ["Python", "Jupyter Notebook", "Scikit-learn", "Pandas" ,"numpy", "matplotlib", "seaborn", "Kaggle"],
+    "techStack": [
+      "Python",
+      "Jupyter Notebook",
+      "Scikit-learn",
+      "Pandas",
+      "numpy",
+      "matplotlib",
+      "seaborn",
+      "Kaggle"
+    ],
     "description": "This is my submission for the Titanic dataset challenge - a classic machine learning problem for predicting passenger survival.",
     "logo": "",
     "link": {
@@ -103,12 +164,40 @@
   },
   {
     "title": "RealState_price_prediction",
-    "techStack": ["Python", "Jupyter Notebook", "Scikit-learn", "Pandas" ,"numpy", "matplotlib", "seaborn"],
+    "techStack": [
+      "Python",
+      "Jupyter Notebook",
+      "Scikit-learn",
+      "Pandas",
+      "numpy",
+      "matplotlib",
+      "seaborn"
+    ],
     "description": "Real estate price prediction model using machine learning algorithms to forecast property values.",
     "logo": "",
     "link": {
       "label": "GitHub Repository",
       "href": "https://github.com/aki-008/RealState_price_prediction"
     }
+  },
+  {
+    "title": "PrepAI",
+    "description": "Prep AI is a comprehensive, all-in-one AI platform designed to help job seekers and professionals master interview skills and deepen their subject knowledge by leveraging conversational and generative AI technologies.",
+    "techStack": [
+      "Backend (FastAPI)",
+      "ChromaDB",
+      "Vapi",
+      "Groq/OpenAI",
+      "Frontend (React + TypeScript + Vite)",
+      "PostgreSQL",
+      "SentenceTransformers",
+      "LlamaIndex"
+    ],
+    "logo": "",
+    "link": {
+      "label": "Link",
+      "href": "https://github.com/aki-008/prepAI"
+    },
+    "id": "1779297601381"
   }
 ]
