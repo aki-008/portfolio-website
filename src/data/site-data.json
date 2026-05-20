@@ -29,6 +29,11 @@
       "name": "Kaggle",
       "url": "https://www.kaggle.com/singh008",
       "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQocgnR9Y_Aq33mYH-oARaN0iIEEb96TllMTQ&s"
+    },
+    {
+      "name": "HugginFace",
+      "url": "https://huggingface.co/aki-008",
+      "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQsa_s2rxUbkFzfFnkUW09-wKzvpzU2Wy8nw&s"
     }
   ],
   "skills": [

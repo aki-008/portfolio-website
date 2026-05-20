@@ -248,7 +248,7 @@ export default function Page() {
                 const cardText = darkMode ? (d.themeColors?.dark?.cardText || "#f9fafb") : (d.themeColors?.light?.cardText || "#000000");
                 const cardBorder = darkMode ? (d.themeColors?.dark?.border || "#1f2937") : (d.themeColors?.light?.border || "#e5e7eb");
                 return (
-                <Card key={i} style={{ backgroundColor: cardBg, color: cardText, borderColor: cardBorder }} className="border">
+                <Card key={i} style={{ backgroundColor: cardBg, color: cardText, borderColor: cardBorder }} className="border p-3">
                   <CardHeader>
                     <div className="flex justify-between items-start gap-4">
                       <div>
