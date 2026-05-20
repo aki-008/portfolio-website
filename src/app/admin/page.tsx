@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Section } from "@/components/ui/section";
+import { SunIcon, MoonIcon } from "lucide-react";
 
 interface Project {
   id?: string;
@@ -28,6 +29,25 @@ interface Publication {
   description?: string;
 }
 
+interface Achievement {
+  heading: string;
+  description: string;
+  link?: { label: string; href: string };
+}
+
+interface Education {
+  school: string;
+  course: string;
+  coursework?: string;
+  duration: string;
+  gpa?: string;
+}
+
+interface Certificate {
+  name: string;
+  link?: { label: string; href: string };
+}
+
 interface SiteData {
   profile: {
     name: string;
@@ -44,6 +64,9 @@ interface SiteData {
   interests: string[];
   projects: Project[];
   publications: Publication[];
+  achievements: Achievement[];
+  education: Education[];
+  certificates: Certificate[];
   themeColors?: {
     light: { bg: string; text: string; border: string; cardBg: string; cardText: string };
     dark: { bg: string; text: string; border: string; cardBg: string; cardText: string };
@@ -67,6 +90,9 @@ const defaultSiteData: SiteData = {
   interests: [],
   projects: [],
   publications: [],
+  achievements: [],
+  education: [],
+  certificates: [],
   themeColors: {
     light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb", cardBg: "#f9fafb", cardText: "#000000" },
     dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937", cardBg: "#111111", cardText: "#f9fafb" },
@@ -76,9 +102,17 @@ const defaultSiteData: SiteData = {
 
 export default function AdminPage() {
   const { data: session, status } = useSession();
+  const [darkMode, setDarkMode] = useState(() => {
+    if (typeof window !== "undefined") {
+      const isDark = localStorage.getItem("admin-dark-mode") === "true";
+      document.documentElement.classList.toggle("dark", isDark);
+      return isDark;
+    }
+    return false;
+  });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [tab, setTab] = useState<"profile" | "social" | "skills" | "interests" | "projects" | "publications" | "colors" | "sections" | "messages">("projects");
+  const [tab, setTab] = useState<"profile" | "social" | "skills" | "interests" | "projects" | "publications" | "achievements" | "education" | "certificates" | "colors" | "sections" | "messages">("projects");
 
   const [siteData, setSiteData] = useState<SiteData>(defaultSiteData);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -107,6 +141,19 @@ export default function AdminPage() {
   // Publication form
   const [pubForm, setPubForm] = useState({ title: "", authors: "", date: "", linkUrl: "", description: "" });
   const [pubMsg, setPubMsg] = useState("");
+  const [editingPub, setEditingPub] = useState<number | null>(null);
+
+  // Achievement form
+  const [achievementForm, setAchievementForm] = useState({ heading: "", description: "", linkLabel: "", linkUrl: "" });
+  const [editingAchievement, setEditingAchievement] = useState<number | null>(null);
+
+  // Education form
+  const [educationForm, setEducationForm] = useState({ school: "", course: "", coursework: "", duration: "", gpa: "" });
+  const [editingEducation, setEditingEducation] = useState<number | null>(null);
+
+  // Certificate form
+  const [certificateForm, setCertificateForm] = useState({ name: "", linkLabel: "", linkUrl: "" });
+  const [editingCertificate, setEditingCertificate] = useState<number | null>(null);
 
   // Theme form
   const [previewColors, setPreviewColors] = useState<{ light: { bg: string; text: string; border: string; cardBg: string; cardText: string }; dark: { bg: string; text: string; border: string; cardBg: string; cardText: string } } | null>(null);
@@ -115,7 +162,7 @@ export default function AdminPage() {
   const fetchData = async () => {
     const res = await fetch("/api/site-data");
     const data = await res.json();
-    setSiteData(data);
+    setSiteData({ ...data, achievements: data.achievements || [], education: data.education || [], certificates: data.certificates || [] });
     setProfile(data.profile);
     setPreviewColors(data.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb", cardBg: "#f9fafb", cardText: "#000000" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937", cardBg: "#111111", cardText: "#f9fafb" } });
     setLoading(false);
@@ -146,13 +193,31 @@ export default function AdminPage() {
     setSaving(false);
   };
 
+  const toggleDark = () => {
+    setDarkMode(prev => {
+      const next = !prev;
+      localStorage.setItem("admin-dark-mode", next.toString());
+      return next;
+    });
+  };
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", darkMode);
+    return () => document.documentElement.classList.remove("dark");
+  }, [darkMode]);
+
   if (status === "loading") {
-    return <main className="container mx-auto p-8 max-w-md"><p className="text-center text-muted-foreground">Loading...</p></main>;
+    return <main className="container mx-auto p-8 max-w-md bg-background text-foreground"><p className="text-center text-muted-foreground">Loading...</p></main>;
   }
 
   if (status === "unauthenticated") {
     return (
-      <main className="container mx-auto p-8 max-w-md">
+      <main className="container mx-auto p-8 max-w-md bg-background text-foreground">
+        <div className="flex justify-end mb-4">
+          <Button variant="ghost" size="icon" onClick={toggleDark}>
+            {darkMode ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />}
+          </Button>
+        </div>
         <h1 className="text-2xl font-bold mb-6">Admin Login</h1>
         <form onSubmit={(e) => { e.preventDefault(); signIn("credentials", { email, password, redirect: false }); }} className="space-y-4">
           <div>
@@ -176,16 +241,24 @@ export default function AdminPage() {
     { key: "interests", label: "Interests" },
     { key: "projects", label: "Projects" },
     { key: "publications", label: "Publications" },
+    { key: "achievements", label: "Achievements" },
+    { key: "education", label: "Education" },
+    { key: "certificates", label: "Certificates" },
     { key: "colors", label: "Colors" },
     { key: "sections", label: "Sections" },
     { key: "messages", label: `Messages (${messages.length})` },
   ] as const;
 
   return (
-    <main className="container mx-auto p-4 max-w-4xl">
+    <main className="container mx-auto p-4 max-w-4xl bg-background text-foreground">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Admin Panel</h1>
-        <Button variant="outline" onClick={() => signOut()}>Logout</Button>
+        <div className="flex gap-2 items-center">
+          <Button variant="ghost" size="icon" onClick={toggleDark}>
+            {darkMode ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />}
+          </Button>
+          <Button variant="outline" onClick={() => signOut()}>Logout</Button>
+        </div>
       </div>
 
       <div className="flex gap-2 mb-6 flex-wrap">
@@ -495,7 +568,7 @@ export default function AdminPage() {
                       <div>
                         <p className="font-medium">{project.title}</p>
                         <div className="flex gap-2 mt-1">
-                          <Badge className={`text-xs ${project.status === "completed" ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"}`}>
+                          <Badge className={`text-xs ${project.status === "completed" ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"}`}>
                             {project.status === "completed" ? "Completed" : "Under Dev"}
                           </Badge>
                         </div>
@@ -524,7 +597,7 @@ export default function AdminPage() {
       {tab === "publications" && (
         <Section>
           <Card>
-            <CardHeader><CardTitle>Add Publication</CardTitle></CardHeader>
+            <CardHeader><CardTitle>{editingPub !== null ? "Edit Publication" : "Add Publication"}</CardTitle></CardHeader>
             <CardContent>
               <div className="space-y-4">
                 <div className="space-y-2">
@@ -556,12 +629,19 @@ export default function AdminPage() {
                     if (!pubForm.authors) { setPubMsg("Authors required"); return; }
                     if (!pubForm.date) { setPubMsg("Date required"); return; }
                     setPubMsg("");
-                    const newPubs = [...siteData.publications, { title: pubForm.title, authors: pubForm.authors, date: pubForm.date, description: pubForm.description || undefined, ...(pubForm.linkUrl ? { link: { label: "Link", href: pubForm.linkUrl } } : {}) }];
+                    const newPubs = [...siteData.publications];
+                    const entry = { title: pubForm.title, authors: pubForm.authors, date: pubForm.date, description: pubForm.description || undefined, ...(pubForm.linkUrl ? { link: { label: "Link", href: pubForm.linkUrl } } : {}) };
+                    if (editingPub !== null) {
+                      newPubs[editingPub] = entry;
+                    } else {
+                      newPubs.push(entry);
+                    }
                     setSiteData(prev => ({ ...prev, publications: newPubs }));
                     saveSiteData({ ...siteData, publications: newPubs });
                     setPubForm({ title: "", authors: "", date: "", linkUrl: "", description: "" });
-                  }}>Add Publication</Button>
-                  {siteData.publications.length > 0 && <Button variant="outline" onClick={() => setPubForm({ title: "", authors: "", date: "", linkUrl: "", description: "" })}>Clear</Button>}
+                    setEditingPub(null);
+                  }}>{editingPub !== null ? "Update" : "Add"}</Button>
+                  {editingPub !== null && <Button variant="outline" onClick={() => { setEditingPub(null); setPubForm({ title: "", authors: "", date: "", linkUrl: "", description: "" }); }}>Cancel</Button>}
                 </div>
                 {pubMsg && <p className="text-sm text-destructive">{pubMsg}</p>}
               </div>
@@ -575,7 +655,221 @@ export default function AdminPage() {
                   <p className="text-xs text-muted-foreground">{pub.authors} — {pub.date}</p>
                 </div>
                 <div className="flex gap-2">
+                  <Button size="sm" variant="outline" onClick={() => { setEditingPub(i); setPubForm({ title: pub.title, authors: pub.authors, date: pub.date, linkUrl: pub.link?.href || "", description: pub.description || "" }); }}>Edit</Button>
                   <Button size="sm" variant="destructive" onClick={() => saveSiteData({ ...siteData, publications: siteData.publications.filter((_, j) => j !== i) })}>Delete</Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Section>
+      )}
+
+      {/* ===== ACHIEVEMENTS TAB ===== */}
+      {tab === "achievements" && (
+        <Section>
+          <Card>
+            <CardHeader><CardTitle>{editingAchievement !== null ? "Edit Achievement" : "Add Achievement"}</CardTitle></CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label>Heading</Label>
+                  <Input value={achievementForm.heading} onChange={e => setAchievementForm({ ...achievementForm, heading: e.target.value })} placeholder="Achievement title" />
+                </div>
+                <div className="space-y-2">
+                  <Label>Description</Label>
+                  <textarea value={achievementForm.description} onChange={e => setAchievementForm({ ...achievementForm, description: e.target.value })}
+                    className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm" rows={2} />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Link Label (optional)</Label>
+                    <Input value={achievementForm.linkLabel} onChange={e => setAchievementForm({ ...achievementForm, linkLabel: e.target.value })} placeholder="Certificate" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Link URL</Label>
+                    <Input value={achievementForm.linkUrl} onChange={e => setAchievementForm({ ...achievementForm, linkUrl: e.target.value })} placeholder="https://..." />
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <Button onClick={() => {
+                    const newAchievements = [...siteData.achievements];
+                    const entry = { heading: achievementForm.heading, description: achievementForm.description, ...(achievementForm.linkUrl ? { link: { label: achievementForm.linkLabel || "Link", href: achievementForm.linkUrl } } : {}) } as Achievement;
+                    if (editingAchievement !== null) {
+                      newAchievements[editingAchievement] = entry;
+                    } else {
+                      newAchievements.push(entry);
+                    }
+                    saveSiteData({ ...siteData, achievements: newAchievements });
+                    setAchievementForm({ heading: "", description: "", linkLabel: "", linkUrl: "" });
+                    setEditingAchievement(null);
+                  }}>{editingAchievement !== null ? "Update" : "Add"}</Button>
+                  {editingAchievement !== null && <Button variant="outline" onClick={() => { setEditingAchievement(null); setAchievementForm({ heading: "", description: "", linkLabel: "", linkUrl: "" }); }}>Cancel</Button>}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          <div className="mt-4 space-y-2">
+            <p className="text-sm text-muted-foreground mb-2">Drag to reorder</p>
+            {siteData.achievements.map((a, i) => (
+              <div key={i} draggable
+                onDragStart={e => { e.dataTransfer.setData("text/plain", i.toString()); (e.currentTarget as HTMLElement).classList.add("opacity-50"); }}
+                onDragOver={e => { e.preventDefault(); }}
+                onDragLeave={e => { (e.currentTarget as HTMLElement).classList.remove("opacity-50"); }}
+                onDrop={e => { e.preventDefault(); const from = parseInt(e.dataTransfer.getData("text/plain")); if (from === i) return; const u = [...siteData.achievements]; const [m] = u.splice(from, 1); u.splice(i, 0, m); saveSiteData({ ...siteData, achievements: u }); }}
+                className="flex items-center justify-between p-3 border rounded-md cursor-grab active:cursor-grabbing"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-muted-foreground cursor-grab">⠿</span>
+                  <div>
+                    <p className="font-medium">{a.heading}</p>
+                    <p className="text-xs text-muted-foreground">{a.description}</p>
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <Button size="sm" variant="outline" onClick={() => { setEditingAchievement(i); setAchievementForm({ heading: a.heading, description: a.description, linkLabel: a.link?.label || "", linkUrl: a.link?.href || "" }); }}>Edit</Button>
+                  <Button size="sm" variant="destructive" onClick={() => saveSiteData({ ...siteData, achievements: siteData.achievements.filter((_, j) => j !== i) })}>Delete</Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Section>
+      )}
+
+      {/* ===== EDUCATION TAB ===== */}
+      {tab === "education" && (
+        <Section>
+          <Card>
+            <CardHeader><CardTitle>{editingEducation !== null ? "Edit Education" : "Add Education"}</CardTitle></CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>School Name</Label>
+                    <Input value={educationForm.school} onChange={e => setEducationForm({ ...educationForm, school: e.target.value })} placeholder="University" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Course Name</Label>
+                    <Input value={educationForm.course} onChange={e => setEducationForm({ ...educationForm, course: e.target.value })} placeholder="BSc Computer Science" />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label>Coursework (optional)</Label>
+                  <Input value={educationForm.coursework} onChange={e => setEducationForm({ ...educationForm, coursework: e.target.value })} placeholder="Algorithms, Data Structures, OS" />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Duration</Label>
+                    <Input value={educationForm.duration} onChange={e => setEducationForm({ ...educationForm, duration: e.target.value })} placeholder="2020 - 2024" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>GPA (optional)</Label>
+                    <Input value={educationForm.gpa} onChange={e => setEducationForm({ ...educationForm, gpa: e.target.value })} placeholder="3.8 / 4.0" />
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <Button onClick={() => {
+                    const newEducation = [...siteData.education];
+                    const entry = { school: educationForm.school, course: educationForm.course, duration: educationForm.duration, coursework: educationForm.coursework || undefined, gpa: educationForm.gpa || undefined } as Education;
+                    if (editingEducation !== null) {
+                      newEducation[editingEducation] = entry;
+                    } else {
+                      newEducation.push(entry);
+                    }
+                    saveSiteData({ ...siteData, education: newEducation });
+                    setEducationForm({ school: "", course: "", coursework: "", duration: "", gpa: "" });
+                    setEditingEducation(null);
+                  }}>{editingEducation !== null ? "Update" : "Add"}</Button>
+                  {editingEducation !== null && <Button variant="outline" onClick={() => { setEditingEducation(null); setEducationForm({ school: "", course: "", coursework: "", duration: "", gpa: "" }); }}>Cancel</Button>}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          <div className="mt-4 space-y-2">
+            <p className="text-sm text-muted-foreground mb-2">Drag to reorder</p>
+            {siteData.education.map((e, i) => (
+              <div key={i} draggable
+                onDragStart={e => { e.dataTransfer.setData("text/plain", i.toString()); (e.currentTarget as HTMLElement).classList.add("opacity-50"); }}
+                onDragOver={e => { e.preventDefault(); }}
+                onDragLeave={e => { (e.currentTarget as HTMLElement).classList.remove("opacity-50"); }}
+                onDrop={e => { e.preventDefault(); const from = parseInt(e.dataTransfer.getData("text/plain")); if (from === i) return; const u = [...siteData.education]; const [m] = u.splice(from, 1); u.splice(i, 0, m); saveSiteData({ ...siteData, education: u }); }}
+                className="flex items-center justify-between p-3 border rounded-md cursor-grab active:cursor-grabbing"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-muted-foreground cursor-grab">⠿</span>
+                  <div>
+                    <p className="font-medium">{e.course}</p>
+                    <p className="text-xs text-muted-foreground">{e.school} — {e.duration}</p>
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <Button size="sm" variant="outline" onClick={() => { setEditingEducation(i); setEducationForm({ school: e.school, course: e.course, coursework: e.coursework || "", duration: e.duration, gpa: e.gpa || "" }); }}>Edit</Button>
+                  <Button size="sm" variant="destructive" onClick={() => saveSiteData({ ...siteData, education: siteData.education.filter((_, j) => j !== i) })}>Delete</Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Section>
+      )}
+
+      {/* ===== CERTIFICATES TAB ===== */}
+      {tab === "certificates" && (
+        <Section>
+          <Card>
+            <CardHeader><CardTitle>{editingCertificate !== null ? "Edit Certificate" : "Add Certificate"}</CardTitle></CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label>Certificate Name</Label>
+                  <Input value={certificateForm.name} onChange={e => setCertificateForm({ ...certificateForm, name: e.target.value })} placeholder="AWS Certified Developer" />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Link Label (optional)</Label>
+                    <Input value={certificateForm.linkLabel} onChange={e => setCertificateForm({ ...certificateForm, linkLabel: e.target.value })} placeholder="Credential" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Link URL</Label>
+                    <Input value={certificateForm.linkUrl} onChange={e => setCertificateForm({ ...certificateForm, linkUrl: e.target.value })} placeholder="https://..." />
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <Button onClick={() => {
+                    const newCerts = [...siteData.certificates];
+                    const entry = { name: certificateForm.name, ...(certificateForm.linkUrl ? { link: { label: certificateForm.linkLabel || "Link", href: certificateForm.linkUrl } } : {}) } as Certificate;
+                    if (editingCertificate !== null) {
+                      newCerts[editingCertificate] = entry;
+                    } else {
+                      newCerts.push(entry);
+                    }
+                    saveSiteData({ ...siteData, certificates: newCerts });
+                    setCertificateForm({ name: "", linkLabel: "", linkUrl: "" });
+                    setEditingCertificate(null);
+                  }}>{editingCertificate !== null ? "Update" : "Add"}</Button>
+                  {editingCertificate !== null && <Button variant="outline" onClick={() => { setEditingCertificate(null); setCertificateForm({ name: "", linkLabel: "", linkUrl: "" }); }}>Cancel</Button>}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          <div className="mt-4 space-y-2">
+            <p className="text-sm text-muted-foreground mb-2">Drag to reorder</p>
+            {siteData.certificates.map((c, i) => (
+              <div key={i} draggable
+                onDragStart={e => { e.dataTransfer.setData("text/plain", i.toString()); (e.currentTarget as HTMLElement).classList.add("opacity-50"); }}
+                onDragOver={e => { e.preventDefault(); }}
+                onDragLeave={e => { (e.currentTarget as HTMLElement).classList.remove("opacity-50"); }}
+                onDrop={e => { e.preventDefault(); const from = parseInt(e.dataTransfer.getData("text/plain")); if (from === i) return; const u = [...siteData.certificates]; const [m] = u.splice(from, 1); u.splice(i, 0, m); saveSiteData({ ...siteData, certificates: u }); }}
+                className="flex items-center justify-between p-3 border rounded-md cursor-grab active:cursor-grabbing"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-muted-foreground cursor-grab">⠿</span>
+                  <div>
+                    <p className="font-medium">{c.name}</p>
+                    {c.link && <p className="text-xs text-muted-foreground">{c.link.href}</p>}
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <Button size="sm" variant="outline" onClick={() => { setEditingCertificate(i); setCertificateForm({ name: c.name, linkLabel: c.link?.label || "", linkUrl: c.link?.href || "" }); }}>Edit</Button>
+                  <Button size="sm" variant="destructive" onClick={() => saveSiteData({ ...siteData, certificates: siteData.certificates.filter((_, j) => j !== i) })}>Delete</Button>
                 </div>
               </div>
             ))}
@@ -640,6 +934,9 @@ export default function AdminPage() {
                   { key: "about", label: "About" },
                   { key: "skills", label: "Skills" },
                   { key: "interests", label: "Interests" },
+                  { key: "achievements", label: "Achievements" },
+                  { key: "education", label: "Education" },
+                  { key: "certificates", label: "Certificates" },
                   { key: "publications", label: "Publications" },
                   { key: "projects", label: "Projects" },
                   { key: "underDevelopment", label: "Under Development Projects" },

@@ -386,5 +386,35 @@
       "border": "#fdfcfc"
     }
   },
-  "hiddenSections": []
+  "hiddenSections": [],
+  "achievements": [
+    {
+      "heading": "Hackofiesta 6.0 – AISpire UP Hackathon",
+      "description": "Finalist\n• Selected as a finalist at one of UP’s premier AI-focused hackathons, hosted at IIIT Lucknow."
+    }
+  ],
+  "education": [
+    {
+      "school": "University of Lucknow",
+      "course": "Bachelor of Computer Application",
+      "duration": "2022 – 2025",
+      "coursework": " Data Structures, Software Engineering, Algorithms, Database Management, Computer Networks, Operating System, Artificial Intelligence, Machine Learning, Computer Architecture"
+    }
+  ],
+  "certificates": [
+    {
+      "name": "Oracle Cloud Infrastructure 2025 Certified Generative AI Professional",
+      "link": {
+        "label": "link",
+        "href": "https://catalog-education.oracle.com/ords/certview/sharebadge?id=3C5CC85EB92C5F5826B8C6BF3BD1D91BB5BC2663AA7A2B11E82A04F2628635D3"
+      }
+    },
+    {
+      "name": "Oracle Cloud Infrastructure 2025 Certified AI Foundations Associate",
+      "link": {
+        "label": "link",
+        "href": "https://catalog-education.oracle.com/ords/certview/sharebadge?id=1CFCF02B2E2C302FE86748753D91B062DCDB4FCE269E5D87A48EDA29A15C6EA3"
+      }
+    }
+  ]
 }

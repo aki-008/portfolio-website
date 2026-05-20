@@ -38,6 +38,25 @@ interface Publication {
   description?: string;
 }
 
+interface Achievement {
+  heading: string;
+  description: string;
+  link?: { label: string; href: string };
+}
+
+interface Education {
+  school: string;
+  course: string;
+  coursework?: string;
+  duration: string;
+  gpa?: string;
+}
+
+interface Certificate {
+  name: string;
+  link?: { label: string; href: string };
+}
+
 interface SiteData {
   profile: {
     name: string;
@@ -52,6 +71,9 @@ interface SiteData {
   interests: string[];
   projects: (Project & { status: string })[];
   publications: Publication[];
+  achievements: Achievement[];
+  education: Education[];
+  certificates: Certificate[];
   themeColors?: {
     light: { bg: string; text: string; border: string; cardBg: string; cardText: string };
     dark: { bg: string; text: string; border: string; cardBg: string; cardText: string };
@@ -74,6 +96,9 @@ export default function Page() {
       ...RESUME_DATA.underDevelopment.map(p => ({ ...p, status: "under-development" as const, deployLink: undefined as string | undefined })),
     ],
     publications: [],
+    achievements: [],
+    education: [],
+    certificates: [],
     themeColors: {
       light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb", cardBg: "#f9fafb", cardText: "#000000" },
       dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937", cardBg: "#111111", cardText: "#f9fafb" },
@@ -93,7 +118,7 @@ export default function Page() {
     fetch('/api/site-data')
       .then(res => res.json())
       .then((siteData: SiteData) => {
-        setData(siteData);
+        setData({ ...siteData, achievements: siteData.achievements || [], education: siteData.education || [], certificates: siteData.certificates || [] });
         const tc = siteData.themeColors;
         if (tc?.dark) {
           document.documentElement.style.setProperty("--theme-dark-bg", tc.dark.bg);
@@ -238,6 +263,69 @@ export default function Page() {
             })}
           </div>
         </Section>
+        )}
+        {d.achievements.length > 0 && !d.hiddenSections?.includes("achievements") && (
+          <Section>
+            <h2 className="text-xl font-bold dark:text-white">Achievements</h2>
+            <div className="space-y-3">
+              {d.achievements.map((a, i) => (
+                <div key={i} className="p-3 border rounded-lg" style={{ backgroundColor: darkMode ? d.themeColors?.dark?.cardBg : d.themeColors?.light?.cardBg, borderColor: darkMode ? d.themeColors?.dark?.border : d.themeColors?.light?.border }}>
+                  <h3 className="font-semibold text-base">{a.heading}</h3>
+                  <p className="text-sm mt-1" style={{ opacity: 0.8 }}>{a.description}</p>
+                  {a.link && (
+                    <a href={a.link.href} target="_blank" className="text-sm inline-flex items-center gap-1 mt-1 hover:underline" style={{ opacity: 0.7 }}>
+                      {a.link.label || "Link"}
+                      <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                        <polyline points="15 3 21 3 21 9"/>
+                        <line x1="10" y1="14" x2="21" y2="3"/>
+                      </svg>
+                    </a>
+                  )}
+                </div>
+              ))}
+            </div>
+          </Section>
+        )}
+        {d.education.length > 0 && !d.hiddenSections?.includes("education") && (
+          <Section>
+            <h2 className="text-xl font-bold dark:text-white">Education</h2>
+            <div className="space-y-3">
+              {d.education.map((e, i) => (
+                <div key={i} className="p-3 border rounded-lg" style={{ backgroundColor: darkMode ? d.themeColors?.dark?.cardBg : d.themeColors?.light?.cardBg, borderColor: darkMode ? d.themeColors?.dark?.border : d.themeColors?.light?.border }}>
+                  <h3 className="font-semibold text-base">{e.course}</h3>
+                  <p className="text-sm mt-1" style={{ opacity: 0.8 }}>{e.school} — {e.duration}</p>
+                  {e.coursework && <p className="text-xs mt-1" style={{ opacity: 0.6 }}>Coursework: {e.coursework}</p>}
+                  {e.gpa && <p className="text-xs mt-1" style={{ opacity: 0.6 }}>GPA: {e.gpa}</p>}
+                </div>
+              ))}
+            </div>
+          </Section>
+        )}
+        {d.certificates.length > 0 && !d.hiddenSections?.includes("certificates") && (
+          <Section>
+            <h2 className="text-xl font-bold dark:text-white">Certificates</h2>
+            <div className="flex flex-wrap gap-2">
+              {d.certificates.map((c, i) => (
+                c.link ? (
+                  <a key={i} href={c.link.href} target="_blank" className="inline-flex items-center gap-1.5 p-2 border rounded-lg text-sm hover:underline"
+                    style={{ backgroundColor: darkMode ? d.themeColors?.dark?.cardBg : d.themeColors?.light?.cardBg, borderColor: darkMode ? d.themeColors?.dark?.border : d.themeColors?.light?.border }}>
+                    {c.name}
+                    <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                      <polyline points="15 3 21 3 21 9"/>
+                      <line x1="10" y1="14" x2="21" y2="3"/>
+                    </svg>
+                  </a>
+                ) : (
+                  <span key={i} className="inline-flex p-2 border rounded-lg text-sm"
+                    style={{ backgroundColor: darkMode ? d.themeColors?.dark?.cardBg : d.themeColors?.light?.cardBg, borderColor: darkMode ? d.themeColors?.dark?.border : d.themeColors?.light?.border }}>
+                    {c.name}
+                  </span>
+                )
+              ))}
+            </div>
+          </Section>
         )}
         {d.publications.length > 0 && !d.hiddenSections?.includes("publications") && (
           <Section>
