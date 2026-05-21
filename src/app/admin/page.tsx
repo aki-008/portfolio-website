@@ -258,7 +258,7 @@ export default function AdminPage() {
   ] as const;
 
   return (
-    <main className="container mx-auto p-4 max-w-4xl bg-background text-foreground">
+    <main className="container mx-auto p-4 max-w-4xl bg-background text-foreground min-h-screen">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Admin Panel</h1>
         <div className="flex gap-2 items-center">

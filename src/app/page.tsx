@@ -154,10 +154,11 @@ export default function Page() {
     <main className="relative h-screen w-full overflow-auto p-4 print:p-12 md:p-16 hide-scrollbar"
       style={{
         color: darkMode ? (d.themeColors?.dark?.text || "#f9fafb") : (d.themeColors?.light?.text || "#000000"),
+        background: "transparent",
       }}
     >
       <FallingPattern
-        className="absolute inset-0"
+        className="fixed inset-0 -z-10"
         color={darkMode ? (d.fallingPatternColor?.dark || d.themeColors?.dark?.border || "#1f2937") : (d.fallingPatternColor?.light || d.themeColors?.light?.border || "#e5e7eb")}
         duration={d.fallingPatternDuration ?? 80}
         blurIntensity={d.fallingPatternBlur ?? "0.5rem"}
