@@ -74,6 +74,9 @@ interface SiteData {
   hiddenSections?: string[];
   iconSize?: number;
   fallingPatternColor?: { light: string; dark: string };
+  fallingPatternBlur?: string;
+  fallingPatternDensity?: number;
+  fallingPatternDuration?: number;
 }
 
 interface Message {
@@ -160,7 +163,7 @@ export default function AdminPage() {
 
   // Theme form
   const [previewColors, setPreviewColors] = useState<{ light: { bg: string; text: string; border: string; cardBg: string; cardText: string }; dark: { bg: string; text: string; border: string; cardBg: string; cardText: string } } | null>(null);
-  const [previewPatternColor, setPreviewPatternColor] = useState<{ light: string; dark: string } | null>(null);
+  const [previewPattern, setPreviewPattern] = useState<{ color: { light: string; dark: string }; blur: string; density: number; duration: number } | null>(null);
   const [editingProject, setEditingProject] = useState<string | null>(null);
 
   const fetchData = async () => {
@@ -169,7 +172,7 @@ export default function AdminPage() {
     setSiteData({ ...data, achievements: data.achievements || [], education: data.education || [], certificates: data.certificates || [], iconSize: data.iconSize || 4 });
     setProfile(data.profile);
     setPreviewColors(data.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb", cardBg: "#f9fafb", cardText: "#000000" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937", cardBg: "#111111", cardText: "#f9fafb" } });
-    setPreviewPatternColor(data.fallingPatternColor || { light: "#e5e7eb", dark: "#1f2937" });
+    setPreviewPattern({ color: data.fallingPatternColor || { light: "#e5e7eb", dark: "#1f2937" }, blur: data.fallingPatternBlur || "0.5rem", density: data.fallingPatternDensity || 2, duration: data.fallingPatternDuration || 80 });
     setLoading(false);
   };
 
@@ -938,9 +941,9 @@ export default function AdminPage() {
                 </div>
               </div>
               <div className="flex gap-3 mt-6">
-                <Button onClick={() => { saveSiteData({ ...siteData, themeColors: previewColors!, fallingPatternColor: previewPatternColor! }); }}>Save Colors</Button>
-                <Button variant="outline" onClick={() => { setPreviewColors(siteData.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb", cardBg: "#f9fafb", cardText: "#000000" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937", cardBg: "#111111", cardText: "#f9fafb" } }); setPreviewPatternColor(siteData.fallingPatternColor || { light: "#e5e7eb", dark: "#1f2937" }); }}>Cancel</Button>
-                <Button variant="ghost" size="sm" onClick={() => { setPreviewColors({ light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb", cardBg: "#f9fafb", cardText: "#000000" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937", cardBg: "#111111", cardText: "#f9fafb" } }); setPreviewPatternColor({ light: "#e5e7eb", dark: "#1f2937" }); }}>Reset</Button>
+                <Button onClick={() => { saveSiteData({ ...siteData, themeColors: previewColors!, fallingPatternColor: previewPattern!.color, fallingPatternBlur: previewPattern!.blur, fallingPatternDensity: previewPattern!.density, fallingPatternDuration: previewPattern!.duration }); }}>Save Colors</Button>
+                <Button variant="outline" onClick={() => { setPreviewColors(siteData.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb", cardBg: "#f9fafb", cardText: "#000000" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937", cardBg: "#111111", cardText: "#f9fafb" } }); setPreviewPattern({ color: siteData.fallingPatternColor || { light: "#e5e7eb", dark: "#1f2937" }, blur: siteData.fallingPatternBlur || "0.5rem", density: siteData.fallingPatternDensity || 2, duration: siteData.fallingPatternDuration || 80 }); }}>Cancel</Button>
+                <Button variant="ghost" size="sm" onClick={() => { setPreviewColors({ light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb", cardBg: "#f9fafb", cardText: "#000000" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937", cardBg: "#111111", cardText: "#f9fafb" } }); setPreviewPattern({ color: { light: "#e5e7eb", dark: "#1f2937" }, blur: "0.5rem", density: 2, duration: 80 }); }}>Reset</Button>
               </div>
             </CardContent>
           </Card>
@@ -964,21 +967,59 @@ export default function AdminPage() {
           </Card>
 
           <Card className="mt-6">
-            <CardHeader><CardTitle>Background Pattern Color</CardTitle></CardHeader>
+            <CardHeader><CardTitle>Background Pattern</CardTitle></CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">Set the color of the animated falling pattern background per mode.</p>
-              <div className="grid grid-cols-2 gap-6">
+              <p className="text-sm text-muted-foreground mb-4">Customize the animated falling pattern background.</p>
+              <div className="grid grid-cols-2 gap-6 mb-6">
                 <div className="space-y-1">
-                  <Label>Light Mode</Label>
+                  <Label>Light Mode Color</Label>
                   <input type="color" className="w-full h-10 rounded cursor-pointer"
-                    value={previewPatternColor?.light || "#e5e7eb"}
-                    onChange={e => setPreviewPatternColor(prev => ({ light: e.target.value, dark: prev?.dark || "#1f2937" }))} />
+                    value={previewPattern?.color?.light || "#e5e7eb"}
+                    onChange={e => setPreviewPattern(prev => prev ? { ...prev, color: { ...prev.color, light: e.target.value } } : prev)} />
                 </div>
                 <div className="space-y-1">
-                  <Label>Dark Mode</Label>
+                  <Label>Dark Mode Color</Label>
                   <input type="color" className="w-full h-10 rounded cursor-pointer"
-                    value={previewPatternColor?.dark || "#1f2937"}
-                    onChange={e => setPreviewPatternColor(prev => ({ light: prev?.light || "#e5e7eb", dark: e.target.value }))} />
+                    value={previewPattern?.color?.dark || "#1f2937"}
+                    onChange={e => setPreviewPattern(prev => prev ? { ...prev, color: { ...prev.color, dark: e.target.value } } : prev)} />
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-4">
+                <div className="space-y-1">
+                  <Label>Effect Strength</Label>
+                  <select className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    value={previewPattern?.blur || "0.5rem"}
+                    onChange={e => setPreviewPattern(prev => prev ? { ...prev, blur: e.target.value } : prev)}>
+                    <option value="0.25rem">Very Strong</option>
+                    <option value="0.5rem">Strong</option>
+                    <option value="1rem">Medium</option>
+                    <option value="1.5rem">Soft</option>
+                    <option value="2rem">Very Soft</option>
+                  </select>
+                </div>
+                <div className="space-y-1">
+                  <Label>Pattern Density</Label>
+                  <select className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    value={previewPattern?.density || 2}
+                    onChange={e => setPreviewPattern(prev => prev ? { ...prev, density: parseInt(e.target.value) } : prev)}>
+                    <option value={1}>Low</option>
+                    <option value={2}>Medium</option>
+                    <option value={3}>High</option>
+                    <option value={4}>Very High</option>
+                    <option value={5}>Max</option>
+                  </select>
+                </div>
+                <div className="space-y-1">
+                  <Label>Animation Speed</Label>
+                  <select className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    value={previewPattern?.duration || 80}
+                    onChange={e => setPreviewPattern(prev => prev ? { ...prev, duration: parseInt(e.target.value) } : prev)}>
+                    <option value={30}>Very Fast</option>
+                    <option value={50}>Fast</option>
+                    <option value={80}>Normal</option>
+                    <option value={120}>Slow</option>
+                    <option value={200}>Very Slow</option>
+                  </select>
                 </div>
               </div>
             </CardContent>

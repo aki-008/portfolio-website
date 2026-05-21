@@ -82,6 +82,9 @@ interface SiteData {
   hiddenSections?: string[];
   iconSize?: number;
   fallingPatternColor?: { light: string; dark: string };
+  fallingPatternBlur?: string;
+  fallingPatternDensity?: number;
+  fallingPatternDuration?: number;
 }
 
 export default function Page() {
@@ -156,9 +159,9 @@ export default function Page() {
       <FallingPattern
         className="absolute inset-0"
         color={darkMode ? (d.fallingPatternColor?.dark || d.themeColors?.dark?.border || "#1f2937") : (d.fallingPatternColor?.light || d.themeColors?.light?.border || "#e5e7eb")}
-        duration={80}
-        blurIntensity="0.5rem"
-        density={2}
+        duration={d.fallingPatternDuration ?? 80}
+        blurIntensity={d.fallingPatternBlur ?? "0.5rem"}
+        density={d.fallingPatternDensity ?? 2}
       />
       <div className="relative z-10">
       <button
