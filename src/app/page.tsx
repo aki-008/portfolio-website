@@ -6,10 +6,14 @@ import { getIcon } from "@/lib/icon-map";
 import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 import { Badge } from "../components/ui/badge";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../components/ui/card";
-import { CommandMenu } from "../components/command-menu";
+import { AnimatedDock } from "../components/ui/animated-dock";
 import { Section } from "../components/ui/section";
 import { FallingPattern } from "../components/ui/falling-pattern";
-import { GlobeIcon } from "lucide-react";
+import { GlobeIcon, Github, Twitter, Linkedin, Mail, Shield, Home, User, Briefcase, ExternalLink, BookOpen, Award, Settings, Search, Camera, Music, MapPin, type LucideIcon } from "lucide-react";
+
+const iconMap: Record<string, LucideIcon> = {
+  Github, Twitter, Linkedin, Mail, Shield, Home, User, Briefcase, ExternalLink, BookOpen, Award, Settings, Search, Camera, Music, MapPin, Globe: GlobeIcon,
+};
 import { Button } from "../components/ui/button";
 import { ProjectCard } from "../components/project-card";
 import { SunIcon, MoonIcon } from "lucide-react";
@@ -85,6 +89,7 @@ interface SiteData {
   fallingPatternBlur?: string;
   fallingPatternDensity?: number;
   fallingPatternDuration?: number;
+  dockItems?: { link: string; name: string; icon: string; target?: string }[];
 }
 
 export default function Page() {
@@ -164,7 +169,7 @@ export default function Page() {
         blurIntensity={d.fallingPatternBlur ?? "0.5rem"}
         density={d.fallingPatternDensity ?? 2}
       />
-      <div className="relative z-10">
+      <div className="relative z-10 pb-32">
       <button
         onClick={() => setDarkMode(!darkMode)}
         className="fixed top-4 right-4 p-2 bg-gray-800 text-white rounded-md dark:bg-gray-200 dark:text-gray-800 print:hidden"
@@ -456,22 +461,34 @@ export default function Page() {
         )}
         <ContactForm />
       </section>
-      <CommandMenu
-        links={[
-          {
-            url: d.profile.personalWebsiteUrl,
-            title: "Personal Website",
-          },
-          ...d.social.map((link) => ({
-            url: link.url,
-            title: link.name,
-          })),
-          {
-            url: "/admin",
-            title: "Admin (Owner Only)",
-          },
-        ]}
-      />
+      <div className="fixed bottom-6 left-0 right-0 z-50 flex justify-center print:hidden">
+        <AnimatedDock
+          items={[
+            ...((d.dockItems && d.dockItems.length > 0 ? d.dockItems : [
+              ...d.social.map(s => ({
+                link: s.url,
+                name: s.name,
+                icon: (() => {
+                  const n = s.name.toLowerCase();
+                  if (n.includes("github")) return "Github";
+                  if (n.includes("x")) return "Twitter";
+                  if (n.includes("linkedin")) return "Linkedin";
+                  return "Globe";
+                })(),
+                target: "_blank",
+              })),
+              { link: "/admin", name: "Admin", icon: "Shield" },
+            ]) as { link: string; name: string; icon: string; target?: string }[]).map((item) => ({
+              link: item.link,
+              target: item.target || "_blank",
+              Icon: (() => {
+                const IconComponent = iconMap[item.icon] || GlobeIcon;
+                return <IconComponent size={24} />;
+              })(),
+            })),
+          ]}
+        />
+      </div>
     </div>
     </main>
   );

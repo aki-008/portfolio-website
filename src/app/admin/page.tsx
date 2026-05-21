@@ -8,7 +8,11 @@ import { Label } from "@/components/ui/label";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Section } from "@/components/ui/section";
-import { SunIcon, MoonIcon } from "lucide-react";
+import { SunIcon, MoonIcon, GlobeIcon, Github, Twitter, Linkedin, Mail, Shield, Home, User, Briefcase, ExternalLink, BookOpen, Award, Settings, Search, Camera, Music, MapPin, type LucideIcon } from "lucide-react";
+
+const adminIconMap: Record<string, LucideIcon> = {
+  Github, Twitter, Linkedin, Mail, Shield, Home, User, Briefcase, ExternalLink, BookOpen, Award, Settings, Search, Camera, Music, MapPin, Globe: GlobeIcon,
+};
 
 interface Project {
   id?: string;
@@ -77,6 +81,7 @@ interface SiteData {
   fallingPatternBlur?: string;
   fallingPatternDensity?: number;
   fallingPatternDuration?: number;
+  dockItems?: { link: string; name: string; icon: string; target?: string }[];
 }
 
 interface Message {
@@ -118,7 +123,7 @@ export default function AdminPage() {
   });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [tab, setTab] = useState<"profile" | "social" | "skills" | "interests" | "projects" | "publications" | "achievements" | "education" | "certificates" | "colors" | "sections" | "messages">("projects");
+  const [tab, setTab] = useState<"profile" | "social" | "skills" | "interests" | "projects" | "publications" | "achievements" | "education" | "certificates" | "colors" | "dock" | "sections" | "messages">("projects");
 
   const [siteData, setSiteData] = useState<SiteData>(defaultSiteData);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -160,6 +165,10 @@ export default function AdminPage() {
   // Certificate form
   const [certificateForm, setCertificateForm] = useState({ name: "", linkLabel: "", linkUrl: "" });
   const [editingCertificate, setEditingCertificate] = useState<number | null>(null);
+
+  // Dock form
+  const [dockForm, setDockForm] = useState({ name: "", link: "", icon: "" });
+  const [editingDock, setEditingDock] = useState<number | null>(null);
 
   // Theme form
   const [previewColors, setPreviewColors] = useState<{ light: { bg: string; text: string; border: string; cardBg: string; cardText: string }; dark: { bg: string; text: string; border: string; cardBg: string; cardText: string } } | null>(null);
@@ -253,6 +262,7 @@ export default function AdminPage() {
     { key: "education", label: "Education" },
     { key: "certificates", label: "Certificates" },
     { key: "colors", label: "Colors" },
+    { key: "dock", label: "Dock" },
     { key: "sections", label: "Sections" },
     { key: "messages", label: `Messages (${messages.length})` },
   ] as const;
@@ -1024,6 +1034,76 @@ export default function AdminPage() {
               </div>
             </CardContent>
           </Card>
+        </Section>
+      )}
+
+      {/* ===== DOCK TAB ===== */}
+      {tab === "dock" && (
+        <Section>
+          <Card>
+            <CardHeader><CardTitle>{editingDock !== null ? "Edit Dock Item" : "Add Dock Item"}</CardTitle></CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="space-y-2">
+                    <Label>Name</Label>
+                    <Input value={dockForm.name} onChange={e => setDockForm({ ...dockForm, name: e.target.value })} placeholder="GitHub" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Link</Label>
+                    <Input value={dockForm.link} onChange={e => setDockForm({ ...dockForm, link: e.target.value })} placeholder="https://..." />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Icon</Label>
+                    <Input value={dockForm.icon} onChange={e => setDockForm({ ...dockForm, icon: e.target.value })} placeholder="Github / Twitter / Mail" />
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <Button onClick={() => {
+                    const newItems = [...(siteData.dockItems || [])];
+                    if (editingDock !== null) {
+                      newItems[editingDock] = dockForm;
+                    } else {
+                      newItems.push(dockForm);
+                    }
+                    saveSiteData({ ...siteData, dockItems: newItems });
+                    setDockForm({ name: "", link: "", icon: "" });
+                    setEditingDock(null);
+                  }}>{editingDock !== null ? "Update" : "Add"}</Button>
+                  {editingDock !== null && <Button variant="outline" onClick={() => { setEditingDock(null); setDockForm({ name: "", link: "", icon: "" }); }}>Cancel</Button>}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          <div className="mt-4 space-y-2">
+            <p className="text-sm text-muted-foreground mb-2">Drag to reorder</p>
+            {(siteData.dockItems || []).map((item, i) => (
+              <div key={i} draggable
+                onDragStart={e => { e.dataTransfer.setData("text/plain", i.toString()); (e.currentTarget as HTMLElement).classList.add("opacity-50"); }}
+                onDragOver={e => { e.preventDefault(); }}
+                onDragLeave={e => { (e.currentTarget as HTMLElement).classList.remove("opacity-50"); }}
+                onDrop={e => { e.preventDefault(); const from = parseInt(e.dataTransfer.getData("text/plain")); if (from === i) return; const u = [...(siteData.dockItems || [])]; const [m] = u.splice(from, 1); u.splice(i, 0, m); saveSiteData({ ...siteData, dockItems: u }); }}
+                className="flex items-center justify-between p-3 border rounded-md cursor-grab active:cursor-grabbing"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-muted-foreground cursor-grab">⠿</span>
+                  <div className="flex items-center gap-2">
+                    <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground text-xs">
+                      {(() => { const Icon = adminIconMap[item.icon] || GlobeIcon; return <Icon size={16} />; })()}
+                    </span>
+                    <div>
+                      <p className="font-medium">{item.name}</p>
+                      <p className="text-sm text-muted-foreground">{item.link}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex gap-1">
+                  <Button size="sm" variant="outline" onClick={() => { setEditingDock(i); setDockForm({ name: item.name, link: item.link, icon: item.icon }); }}>Edit</Button>
+                  <Button size="sm" variant="destructive" onClick={() => saveSiteData({ ...siteData, dockItems: siteData.dockItems!.filter((_, j) => j !== i) })}>Delete</Button>
+                </div>
+              </div>
+            ))}
+          </div>
         </Section>
       )}
 
