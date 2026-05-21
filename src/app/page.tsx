@@ -93,14 +93,7 @@ interface SiteData {
 }
 
 export default function Page() {
-  const [darkMode, setDarkMode] = useState(() => {
-    if (typeof window !== "undefined") {
-      const isDark = localStorage.getItem("portfolio-dark-mode") !== "light";
-      document.documentElement.classList.toggle("dark", isDark);
-      return isDark;
-    }
-    return true;
-  });
+  const [darkMode, setDarkMode] = useState(true);
   const [data, setData] = useState<SiteData | null>(null);
   const [loading, setLoading] = useState(true);
 

@@ -15,3 +15,18 @@ export async function GET() {
 
   return NextResponse.json(messages);
 }
+
+export async function DELETE(req: Request) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { id } = await req.json();
+  if (!id) {
+    return NextResponse.json({ error: "Missing message id" }, { status: 400 });
+  }
+
+  await prisma.contactMessage.delete({ where: { id } });
+  return NextResponse.json({ success: true });
+}

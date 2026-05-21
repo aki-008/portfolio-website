@@ -1172,7 +1172,14 @@ export default function AdminPage() {
                         <CardTitle className="text-lg">{msg.firstName} {msg.lastName}</CardTitle>
                         <p className="text-sm text-muted-foreground">{msg.email}</p>
                       </div>
-                      <p className="text-xs text-muted-foreground">{new Date(msg.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}</p>
+                      <div className="flex items-center gap-2">
+                        <p className="text-xs text-muted-foreground">{new Date(msg.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}</p>
+                        <Button size="sm" variant="destructive" onClick={async () => {
+                          if (!confirm("Delete this message?")) return;
+                          await fetch("/api/admin/messages", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: msg.id }) });
+                          fetchMessages();
+                        }}>Delete</Button>
+                      </div>
                     </div>
                   </CardHeader>
                   <CardContent><p className="whitespace-pre-wrap">{msg.message}</p></CardContent>
