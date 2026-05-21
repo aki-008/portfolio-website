@@ -34,13 +34,26 @@ export const AnimatedDock = ({ className, items }: AnimatedDockProps) => {
     >
       {items.map((item, index) => (
         <DockItem key={index} mouseX={mouseX}>
-          <Link
-            href={item.link}
-            target={item.target}
-            className="grow flex items-center justify-center w-full h-full text-primary-foreground"
-          >
-            {item.Icon}
-          </Link>
+          {item.link.startsWith("#") ? (
+            <a
+              href={item.link}
+              onClick={(e) => {
+                e.preventDefault();
+                document.querySelector(item.link)?.scrollIntoView({ behavior: "smooth" });
+              }}
+              className="grow flex items-center justify-center w-full h-full text-primary-foreground"
+            >
+              {item.Icon}
+            </a>
+          ) : (
+            <Link
+              href={item.link}
+              target={item.target}
+              className="grow flex items-center justify-center w-full h-full text-primary-foreground"
+            >
+              {item.Icon}
+            </Link>
+          )}
         </DockItem>
       ))}
     </motion.div>

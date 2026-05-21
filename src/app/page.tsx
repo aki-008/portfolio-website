@@ -156,7 +156,7 @@ export default function Page() {
   const underDevProjects = d.projects.filter(p => p.status === "under-development");
 
   return (
-    <main className="relative h-screen w-full overflow-auto p-4 print:p-12 md:p-16 hide-scrollbar"
+    <main className="relative h-screen w-full overflow-auto p-4 print:p-12 md:p-16 hide-scrollbar smooth-scroll"
       style={{
         color: darkMode ? (d.themeColors?.dark?.text || "#f9fafb") : (d.themeColors?.light?.text || "#000000"),
         background: "transparent",
@@ -240,7 +240,7 @@ export default function Page() {
           </Avatar>
         </div>
         {(!d.hiddenSections?.includes("about")) && (
-        <Section>
+        <Section id="about">
           <h2 className="text-xl font-bold dark:text-white">About</h2>
           <p className="text-pretty font-mono text-sm text-muted-foreground dark:text-gray-400 w-full max-w-[105ch]">
             {d.profile.summary}
@@ -248,7 +248,7 @@ export default function Page() {
         </Section>
         )}
         {(!d.hiddenSections?.includes("skills")) && (
-        <Section>
+        <Section id="skills">
           <h2 className="text-xl font-bold dark:text-white">Skills</h2>
           <div className="space-y-2">
             {d.skills.map((skillCategory) => (
@@ -270,7 +270,7 @@ export default function Page() {
         </Section>
         )}
         {(!d.hiddenSections?.includes("interests")) && (
-        <Section>
+        <Section id="interests">
           <h2 className="print-force-new-page text-xl font-bold dark:text-white">Interests</h2>
           <div className="flex flex-wrap gap-1.5 mt-1">
             {d.interests.map((interest) => {
@@ -287,7 +287,7 @@ export default function Page() {
         </Section>
         )}
         {d.achievements.length > 0 && !d.hiddenSections?.includes("achievements") && (
-          <Section>
+          <Section id="achievements">
             <h2 className="text-xl font-bold dark:text-white">Achievements</h2>
             <div className="-mx-3 space-y-3">
               {d.achievements.map((a, i) => {
@@ -317,7 +317,7 @@ export default function Page() {
           </Section>
         )}
         {d.education.length > 0 && !d.hiddenSections?.includes("education") && (
-          <Section>
+          <Section id="education">
             <h2 className="text-xl font-bold dark:text-white">Education</h2>
             <div className="-mx-3 space-y-3">
               {d.education.map((e, i) => {
@@ -339,7 +339,7 @@ export default function Page() {
           </Section>
         )}
         {d.certificates.length > 0 && !d.hiddenSections?.includes("certificates") && (
-          <Section>
+          <Section id="certificates">
             <h2 className="text-xl font-bold dark:text-white">Certificates</h2>
             <div className="-mx-3 flex flex-wrap gap-3">
               {d.certificates.map((c, i) => {
@@ -367,7 +367,7 @@ export default function Page() {
           </Section>
         )}
         {d.publications.length > 0 && !d.hiddenSections?.includes("publications") && (
-          <Section>
+          <Section id="publications">
             <h2 className="text-xl font-bold dark:text-white">Publications</h2>
             <div className="-mx-3 space-y-3">
               {d.publications.map((pub, i) => {
@@ -408,7 +408,7 @@ export default function Page() {
           </Section>
         )}
         {(!d.hiddenSections?.includes("projects")) && (
-        <Section className="scroll-mb-16">
+        <Section id="projects" className="scroll-mb-16">
           <h2 className="text-xl font-bold dark:text-white">Projects</h2>
           <div className="-mx-3 grid grid-cols-1 gap-3 print:grid-cols-3 print:gap-2 md:grid-cols-2 lg:grid-cols-3">
             {loading ? (
@@ -434,7 +434,7 @@ export default function Page() {
         </Section>
         )}
         {(!d.hiddenSections?.includes("underDevelopment") && underDevProjects.length > 0) && (
-        <Section className="scroll-mb-16">
+        <Section id="under-development" className="scroll-mb-16">
           <h2 className="text-xl font-bold dark:text-white">Under Development Projects</h2>
           <div className="-mx-3 grid grid-cols-1 gap-3 print:grid-cols-3 print:gap-2 md:grid-cols-2 lg:grid-cols-3">
             {loading ? (
@@ -459,7 +459,7 @@ export default function Page() {
           </div>
         </Section>
         )}
-        <ContactForm />
+        <div id="contact"><ContactForm /></div>
       </section>
       <div className="fixed bottom-6 left-0 right-0 z-50 flex justify-center print:hidden">
         <AnimatedDock
@@ -482,6 +482,9 @@ export default function Page() {
               link: item.link,
               target: item.target || "_blank",
               Icon: (() => {
+                if (item.icon.startsWith("http") || item.icon.startsWith("/")) {
+                  return <img src={item.icon} alt="" className="w-6 h-6 rounded-full" />;
+                }
                 const IconComponent = iconMap[item.icon] || GlobeIcon;
                 return <IconComponent size={24} />;
               })(),

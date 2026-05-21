@@ -84,6 +84,10 @@
   display: none;
 }
 
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
 .print-force-new-page {
   page-break-before: always;
 }

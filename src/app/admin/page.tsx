@@ -1055,7 +1055,7 @@ export default function AdminPage() {
                   </div>
                   <div className="space-y-2">
                     <Label>Icon</Label>
-                    <Input value={dockForm.icon} onChange={e => setDockForm({ ...dockForm, icon: e.target.value })} placeholder="Github / Twitter / Mail" />
+                    <Input value={dockForm.icon} onChange={e => setDockForm({ ...dockForm, icon: e.target.value })} placeholder="Github / Twitter / Mail or image URL" />
                   </div>
                 </div>
                 <div className="flex gap-2">
@@ -1089,7 +1089,13 @@ export default function AdminPage() {
                   <span className="text-muted-foreground cursor-grab">⠿</span>
                   <div className="flex items-center gap-2">
                     <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground text-xs">
-                      {(() => { const Icon = adminIconMap[item.icon] || GlobeIcon; return <Icon size={16} />; })()}
+                      {(() => {
+                        if (item.icon.startsWith("http") || item.icon.startsWith("/")) {
+                          return <img src={item.icon} alt="" className="w-5 h-5 rounded-full" />;
+                        }
+                        const Icon = adminIconMap[item.icon] || GlobeIcon;
+                        return <Icon size={16} />;
+                      })()}
                     </span>
                     <div>
                       <p className="font-medium">{item.name}</p>
