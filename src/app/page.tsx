@@ -93,7 +93,14 @@ interface SiteData {
 }
 
 export default function Page() {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    if (typeof window !== "undefined") {
+      const isDark = localStorage.getItem("portfolio-dark-mode") !== "light";
+      document.documentElement.classList.toggle("dark", isDark);
+      return isDark;
+    }
+    return true;
+  });
   const [data, setData] = useState<SiteData | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -171,7 +178,7 @@ export default function Page() {
       />
       <div className="relative z-10 pb-32">
       <button
-        onClick={() => setDarkMode(!darkMode)}
+        onClick={() => setDarkMode(prev => { const next = !prev; localStorage.setItem("portfolio-dark-mode", next ? "dark" : "light"); return next; })}
         className="fixed top-4 right-4 p-2 bg-gray-800 text-white rounded-md dark:bg-gray-200 dark:text-gray-800 print:hidden"
       >
         {darkMode ? <SunIcon className="h-6 w-6" /> : <MoonIcon className="h-6 w-6" />}
