@@ -73,6 +73,7 @@ interface SiteData {
   };
   hiddenSections?: string[];
   iconSize?: number;
+  fallingPatternColor?: { light: string; dark: string };
 }
 
 interface Message {
@@ -159,6 +160,7 @@ export default function AdminPage() {
 
   // Theme form
   const [previewColors, setPreviewColors] = useState<{ light: { bg: string; text: string; border: string; cardBg: string; cardText: string }; dark: { bg: string; text: string; border: string; cardBg: string; cardText: string } } | null>(null);
+  const [previewPatternColor, setPreviewPatternColor] = useState<{ light: string; dark: string } | null>(null);
   const [editingProject, setEditingProject] = useState<string | null>(null);
 
   const fetchData = async () => {
@@ -167,6 +169,7 @@ export default function AdminPage() {
     setSiteData({ ...data, achievements: data.achievements || [], education: data.education || [], certificates: data.certificates || [], iconSize: data.iconSize || 4 });
     setProfile(data.profile);
     setPreviewColors(data.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb", cardBg: "#f9fafb", cardText: "#000000" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937", cardBg: "#111111", cardText: "#f9fafb" } });
+    setPreviewPatternColor(data.fallingPatternColor || { light: "#e5e7eb", dark: "#1f2937" });
     setLoading(false);
   };
 
@@ -935,9 +938,9 @@ export default function AdminPage() {
                 </div>
               </div>
               <div className="flex gap-3 mt-6">
-                <Button onClick={() => { saveSiteData({ ...siteData, themeColors: previewColors! }); }}>Save Colors</Button>
-                <Button variant="outline" onClick={() => setPreviewColors(siteData.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb", cardBg: "#f9fafb", cardText: "#000000" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937", cardBg: "#111111", cardText: "#f9fafb" } })}>Cancel</Button>
-                <Button variant="ghost" size="sm" onClick={() => setPreviewColors({ light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb", cardBg: "#f9fafb", cardText: "#000000" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937", cardBg: "#111111", cardText: "#f9fafb" } })}>Reset</Button>
+                <Button onClick={() => { saveSiteData({ ...siteData, themeColors: previewColors!, fallingPatternColor: previewPatternColor! }); }}>Save Colors</Button>
+                <Button variant="outline" onClick={() => { setPreviewColors(siteData.themeColors || { light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb", cardBg: "#f9fafb", cardText: "#000000" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937", cardBg: "#111111", cardText: "#f9fafb" } }); setPreviewPatternColor(siteData.fallingPatternColor || { light: "#e5e7eb", dark: "#1f2937" }); }}>Cancel</Button>
+                <Button variant="ghost" size="sm" onClick={() => { setPreviewColors({ light: { bg: "#ffffff", text: "#000000", border: "#e5e7eb", cardBg: "#f9fafb", cardText: "#000000" }, dark: { bg: "#000000", text: "#f9fafb", border: "#1f2937", cardBg: "#111111", cardText: "#f9fafb" } }); setPreviewPatternColor({ light: "#e5e7eb", dark: "#1f2937" }); }}>Reset</Button>
               </div>
             </CardContent>
           </Card>
@@ -956,6 +959,27 @@ export default function AdminPage() {
                   <option value={6}>X-Large (24px)</option>
                   <option value={8}>2X-Large (32px)</option>
                 </select>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="mt-6">
+            <CardHeader><CardTitle>Background Pattern Color</CardTitle></CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground mb-4">Set the color of the animated falling pattern background per mode.</p>
+              <div className="grid grid-cols-2 gap-6">
+                <div className="space-y-1">
+                  <Label>Light Mode</Label>
+                  <input type="color" className="w-full h-10 rounded cursor-pointer"
+                    value={previewPatternColor?.light || "#e5e7eb"}
+                    onChange={e => setPreviewPatternColor(prev => ({ light: e.target.value, dark: prev?.dark || "#1f2937" }))} />
+                </div>
+                <div className="space-y-1">
+                  <Label>Dark Mode</Label>
+                  <input type="color" className="w-full h-10 rounded cursor-pointer"
+                    value={previewPatternColor?.dark || "#1f2937"}
+                    onChange={e => setPreviewPatternColor(prev => ({ light: prev?.light || "#e5e7eb", dark: e.target.value }))} />
+                </div>
               </div>
             </CardContent>
           </Card>

@@ -8,6 +8,7 @@ import { Badge } from "../components/ui/badge";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../components/ui/card";
 import { CommandMenu } from "../components/command-menu";
 import { Section } from "../components/ui/section";
+import { FallingPattern } from "../components/ui/falling-pattern";
 import { GlobeIcon } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { ProjectCard } from "../components/project-card";
@@ -80,6 +81,7 @@ interface SiteData {
   };
   hiddenSections?: string[];
   iconSize?: number;
+  fallingPatternColor?: { light: string; dark: string };
 }
 
 export default function Page() {
@@ -148,10 +150,17 @@ export default function Page() {
   return (
     <main className="relative min-h-screen w-full overflow-auto p-4 print:p-12 md:p-16"
       style={{
-        backgroundColor: darkMode ? (d.themeColors?.dark?.bg || "#000000") : (d.themeColors?.light?.bg || "#ffffff"),
         color: darkMode ? (d.themeColors?.dark?.text || "#f9fafb") : (d.themeColors?.light?.text || "#000000"),
       }}
     >
+      <FallingPattern
+        className="absolute inset-0"
+        color={darkMode ? (d.fallingPatternColor?.dark || d.themeColors?.dark?.border || "#1f2937") : (d.fallingPatternColor?.light || d.themeColors?.light?.border || "#e5e7eb")}
+        duration={80}
+        blurIntensity="0.5rem"
+        density={2}
+      />
+      <div className="relative z-10">
       <button
         onClick={() => setDarkMode(!darkMode)}
         className="fixed top-4 right-4 p-2 bg-gray-800 text-white rounded-md dark:bg-gray-200 dark:text-gray-800 print:hidden"
@@ -459,6 +468,7 @@ export default function Page() {
           },
         ]}
       />
+    </div>
     </main>
   );
 }
