@@ -1,23 +1,28 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { promises as fs } from "fs";
-import path from "path";
+import { prisma } from "@/lib/prisma";
+import { readFile } from "fs/promises";
+import { join } from "path";
 
-const DATA_FILE = path.join(process.cwd(), "src/data/site-data.json");
-
-async function readData() {
-  const raw = await fs.readFile(DATA_FILE, "utf-8");
-  return JSON.parse(raw);
-}
-
-async function writeData(data: unknown) {
-  await fs.writeFile(DATA_FILE, JSON.stringify(data, null, 2));
-}
+const DEFAULT_ID = "default";
 
 export async function GET() {
-  const data = await readData();
-  return NextResponse.json(data);
+  let row = await prisma.siteData.findUnique({ where: { id: DEFAULT_ID } });
+
+  if (!row) {
+    const filePath = join(process.cwd(), "src", "data", "site-data.json");
+    const raw = await readFile(filePath, "utf-8");
+    const fallbackData = JSON.parse(raw);
+
+    row = await prisma.siteData.upsert({
+      where: { id: DEFAULT_ID },
+      update: { data: fallbackData },
+      create: { id: DEFAULT_ID, data: fallbackData },
+    });
+  }
+
+  return NextResponse.json(row.data);
 }
 
 export async function PUT(request: Request) {
@@ -28,7 +33,11 @@ export async function PUT(request: Request) {
 
   try {
     const body = await request.json();
-    await writeData(body);
+    await prisma.siteData.upsert({
+      where: { id: DEFAULT_ID },
+      update: { data: body },
+      create: { id: DEFAULT_ID, data: body },
+    });
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Site data update error:", error);
