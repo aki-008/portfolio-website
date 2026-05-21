@@ -75,6 +75,14 @@
   }
 }
 
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 .print-force-new-page {
   page-break-before: always;
 }

@@ -151,7 +151,7 @@ export default function Page() {
   const underDevProjects = d.projects.filter(p => p.status === "under-development");
 
   return (
-    <main className="relative min-h-screen w-full overflow-auto p-4 print:p-12 md:p-16"
+    <main className="relative h-screen w-full overflow-auto p-4 print:p-12 md:p-16 hide-scrollbar"
       style={{
         color: darkMode ? (d.themeColors?.dark?.text || "#f9fafb") : (d.themeColors?.light?.text || "#000000"),
       }}
