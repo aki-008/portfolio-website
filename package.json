@@ -28,7 +28,7 @@
     "lucide-react": "^0.300.0",
     "motion": "^12.40.0",
     "next": "14.0.4",
-    "next-auth": "^4.24.14",
+    "next-auth": "^4.24.15",
     "prisma": "^5.22.0",
     "react": "^18",
     "react-dom": "^18",
